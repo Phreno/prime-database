@@ -3,12 +3,82 @@ export primeDB=$(pwd)
 export primeDB_DATA_FOLDER=${primeDB}/data
 export primeDB_ARCHIVE=${primeDB}/.data.tar
 
+export primeDB_PADDING="%05d"
+export primeDB_CARTOUCHE_HEIGHT=2
+export primeDB_COLUMNS=8
+
+
+debug(){
+  source .profile
+  echo "TEST primeDB_chunk_getName()"
+  primeDB_chunk_getName
+  primeDB_chunk_getName 1
+  primeDB_chunk_getName 003
+  primeDB_chunk_getName 055
+  
+  echo "TEST primeDB_chunk_getCartouche"
+  primeDB_chunk_getCartouche
+  primeDB_chunk_getCartouche 1
+  primeDB_chunk_getCartouche 003
+  primeDB_chunk_getCartouche 055
+
+  echo "TEST primeDB_chunk_getLine"
+  primeDB_chunk_getLine 
+  primeDB_chunk_getLine 1 1
+  primeDB_chunk_getLine 3 3
+  primeDB_chunk_getLine 55 55
+
+  echo "TEST primeDB_chunk_getOffsetFromLine"
+  primeDB_chunk_getOffsetFromLine 1
+  primeDB_chunk_getOffsetFromLine 2
+  primeDB_chunk_getOffsetFromLine 3
+  
+  primeDB_chunk_getOffsetFromLine 1 10
+}
 
 ###########
 # SERVICE #
 ###########
 
-primeDB_is
+# Récupère le nom d'une archive en fonction de son index
+primeDB_chunk_getName(){
+  indice=${1:-1}
+  chunkName=$( printf "${primeDB_DATA_FOLDER}/${primeDB_PADDING}.zip" ${indice})
+  echo $chunkName
+}
+
+# Récupère le cartouche d'une portion
+primeDB_chunk_getCartouche(){
+  indice=${1:-1}
+  cartouche=$(unzip -qq -c $( primeDB_chunk_getName ${indice} ) | head -n 1)
+  echo ${cartouche}
+}
+
+# Récupère la nième ligne d'une portion
+primeDB_chunk_getLine(){
+  indice=${1:-1}
+  line=${2:-1}
+  result=$(unzip -qq -c $( primeDB_chunk_getName ${indice} ) | head -n $((${line}+${primeDB_CARTOUCHE_HEIGHT})) | tail -n 1)
+  echo ${result}
+}
+
+# Récupère le nième terme d'une ligne
+primeDB_chunk_getOffsetFromLine(){
+  offset=${1:-1}
+  line=${2:-1}
+  chunk=${3:-1}
+  echo $(primeDB_chunk_getLine $chunk $line ) | awk -v n=${offset} '{print $n}'
+}
+
+# TODO
+# lineMin
+# lineMax
+# chunkMin
+# chunkMax
+# primesBetween
+# isPrime
+# primesAround
+# getNth
 
 #########
 # SETUP #
@@ -55,7 +125,7 @@ primeDB_removeData(){
 
 # Sauvegarde les données
 primeDB_backupData(){
-  folder=${1:-${primeDB_DATA_FOLDER}}
+  folder=$( basename ${1:-${primeDB_DATA_FOLDER}} )
   archive=${2:-${primeDB_ARCHIVE}}
   echo ".. INFO backup data into ${archive}"
   tar cvf ${archive} ${folder}
@@ -79,7 +149,7 @@ primeDB_normalizeDatafileName(){
   cd ${folder}
   for f in primes[0-9]*;
   do
-    indice=$( printf %05d ${${f#primes}%.zip} )
+    indice=$( printf ${primeDB_PADDING} ${${f#primes}%.zip} )
     new="${indice}.zip"
     echo "moving $f to $new"
     mv $f $new;
