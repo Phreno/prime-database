@@ -1,0 +1,10 @@
+# primeDatabase
+
+Base de données de nombres premier
+
+# Développement en cours
+
+pour installer:
+
+  source .profile
+  primeDB_setup
