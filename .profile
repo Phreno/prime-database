@@ -77,6 +77,15 @@ debug_core(){
   primeDB_chunk_countLines 1
   primeDB_chunk_countLines 2
   primeDB_chunk_countLines 3
+
+  echo "TEST primeDB_listChunksFiles"
+  primeDB_listChunksFiles
+
+  echo "TEST primeDB_listChunksNames"
+  primeDB_listChunksNames
+
+  echo "TEST primeDB_countChunks"
+  primeDB_countChunks
 }
 
 
@@ -153,9 +162,22 @@ primeDB_chunk_countLines(){
   primeDB_chunk_get ${chunkIndex} | wc -l
 }
 
-#TODO
-# liste chunk
-# compte chunk
+# Liste les chunk disponibles
+primeDB_listChunksFiles(){
+  ls -1 ${primeDB_DATA_FOLDER}/*.zip
+}
+
+# Liste le nom des chunks disponibles
+primeDB_listChunksNames(){
+  for l in $(find ${primeDB_DATA_FOLDER} -type f -exec basename {} \; | sort); do
+    echo ${l%.zip}
+  done
+}
+
+# Compte les chunks disponibles
+primeDB_countChunks(){
+  primeDB_listChunksFiles | wc -l
+}
 
 #########
 # SETUP #
