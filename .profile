@@ -6,9 +6,27 @@ export primeDB_ARCHIVE=${primeDB}/.data.tar
 export primeDB_PADDING="%05d"
 export primeDB_CARTOUCHE_HEIGHT=2
 export primeDB_COLUMNS=8
+export primeDB_CHUNK_SIZE=125002
+
+# TODO
+# primesBetween
+# isPrime
+# primesAround
+# getNth
+
+###########
+# SERVICE #
+###########
+debug_service(){
+  source .profile
+
+}
 
 
-debug(){
+########
+# CORE #
+########
+debug_core(){
   source .profile
   echo "TEST primeDB_chunk_getPath()"
   primeDB_chunk_getPath
@@ -54,11 +72,13 @@ debug(){
   primeDB_chunk_getMaxPrime 1
   primeDB_chunk_getMaxPrime 2
   primeDB_chunk_getMaxPrime 3
+
+  echo "TEST primeDB_chunk_countLines"
+  primeDB_chunk_countLines 1
+  primeDB_chunk_countLines 2
+  primeDB_chunk_countLines 3
 }
 
-###########
-# SERVICE #
-###########
 
 # Récupère le nom d'une archive en fonction de son index
 primeDB_chunk_getPath(){
@@ -112,7 +132,6 @@ primeDB_chunk_line_getMinPrime(){
   primeDB_chunk_line_getPrime ${chunkIndex} ${line} ${offset}
 }
 
-
 # Récupère la valeur minimum d'un chunk
 primeDB_chunk_getMinPrime(){
   chunkIndex=${1:-1}
@@ -123,16 +142,20 @@ primeDB_chunk_getMinPrime(){
 
 # Récupère la valeur maximum d'un chunk
 primeDB_chunk_getMaxPrime(){
-  chunkIndex=${1:-2}
+  chunkIndex=${1:-1}
   offset=${primeDB_COLUMNS}
   primeDB_chunk_get ${chunkIndex} | tail -n 1 | awk -v n=${offset} '{print $n}'
 }
 
-# TODO
-# primesBetween
-# isPrime
-# primesAround
-# getNth
+# Compte le nombre de ligne d'un chunk
+primeDB_chunk_countLines(){
+  chunkIndex=${1:-1}
+  primeDB_chunk_get ${chunkIndex} | wc -l
+}
+
+#TODO
+# liste chunk
+# compte chunk
 
 #########
 # SETUP #
