@@ -1,19 +1,19 @@
+#!/bin/sh
+# ..............
 # [K3rn€l_P4n1k]
+# ..............
 
 # TODO
-# split into many files
 # ensure args 
 # catch error
 
+# =====
+# SETUP
+# =====
 
-
-
-
-#########
-# SETUP #
-#########
-
+#
 # Installe la base de données des nombres premiers
+#
 primeDB_setup(){
   echo ".. INFO setup primeDB"
   primeDB_removeData
@@ -24,8 +24,10 @@ primeDB_setup(){
   echo ".. INFO setup done"
 }
 
-# Télécharge tous les fichier zip disponibles à l'URL 
+#
+# Télécharge tous les fichier zip disponibles à l'URL
 # indiquée dans le dossier passé en paramètre
+#
 primeDB_downloadPrimes(){
   folder=${1:-${primeDB_DATA_FOLDER}}
   url="http://primes.utm.edu/lists/small/millions"
@@ -35,7 +37,9 @@ primeDB_downloadPrimes(){
   echo ".. INFO download done"
 }
 
+#
 # Supprime les fichiers inutiles
+#
 primeDB_cleanFolder(){
   folder=${1:-${primeDB_DATA_FOLDER}}
   useless="robots.txt"
@@ -44,7 +48,9 @@ primeDB_cleanFolder(){
   echo ".. INFO clean done"
 }
 
+#
 # Désinstalle la banque de données
+#
 primeDB_removeData(){
   folder=${1:-${primeDB_DATA_FOLDER}}
   echo ".. INFO delete primes data"
@@ -52,7 +58,9 @@ primeDB_removeData(){
   echo ".. INFO delete done"
 }
 
+#
 # Sauvegarde les données
+#
 primeDB_backupData(){
   folder=$( basename ${1:-${primeDB_DATA_FOLDER}} )
   archive=${2:-${primeDB_ARCHIVE}}
@@ -61,7 +69,9 @@ primeDB_backupData(){
   echo ".. INFO backup done"
 }
 
+#
 # Restaure les données
+#
 primeDB_restoreData(){
   primeDB_removeData
   archive=${2:-${primeDB_ARCHIVE}}
@@ -70,8 +80,9 @@ primeDB_restoreData(){
   echo ".. INFO restore done"
 }
 
-
+#
 # Normalise les indices suffixées sur les noms de fichier
+#
 primeDB_normalizeDatafileName(){
   folder=${1:-${primeDB_DATA_FOLDER}}
   currentFolder=$(pwd)
