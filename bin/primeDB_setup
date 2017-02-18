@@ -1,0 +1,44 @@
+#!/bin/bash
+# ..............
+# [K3rn€l_P4n1k]
+# ..............
+
+# =====
+# SETUP
+# =====
+#
+# Installe la base de données des nombres premiers.
+# L'installation se passe en 3 étapes:
+# - Téléchargement des zip contenant les nombres premiers
+# - Renomage des fichiers pour pouvoir automatiser les calculs
+# - Sauvegarde du répertoire ( permet le traitement du setup offline )
+
+primeDB_SETUP_SH="$( realpath $0 )"
+primeDB_SETUP_SH_DIR="$( dirname ${primeDB_SETUP_SCRIPT} )"
+
+#
+# Mise à jour des variables d'environnement
+#
+check_env_or_update(){
+  if [ -z ${primeDB_SETUP_PROFILE}+UNKNOW_PROFILE ];
+  then
+    echo ".. INFO sourcing setup profile"
+    source "${primeDB_SETUP_SH_DIR}/lib/setup.profile"
+  fi
+}
+
+#
+# Installation des données
+#
+primeDB_setup(){
+  echo ".. INFO setup primeDB"
+  primeDB_setup_removeData
+  primeDB_setup_downloadPrimes
+  primeDB_setup_cleanFolder
+  primeDB_setup_normalizeDatafileName
+  primeDB_setup_backupData
+  echo ".. INFO setup done"
+}
+
+check_env_or_update
+primeDB_setup
