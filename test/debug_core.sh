@@ -1,129 +1,147 @@
-#!/bin/sh
+#!/bin/bash
+# ..............
+# [K3rn€l_P4n1k]
+# ..............
+
+# ==========
+# DEBUG_CORE
+# ==========
+#
+# Test les fonctions d'exploitation des chunks
+
+primeDB_DEBUG_CORE_SH="${BASH_SOURCE[0]:-$(realpath ${0})}"
+primeDB_DEBUG_CORE_SH_DIR="$( dirname ${primeDB_DEBUG_CORE_SH} )"
+
+#
+# Gestion des erreurs
+#
+source ${primeDB_DEBUG_CORE_SH_DIR}/../bin/lib/error.profile
+
+#
+# Import des dépendances
+#
+source ${primeDB_DEBUG_CORE_SH_DIR}/../bin/lib/base.profile
+source ${primeDB_DEBUG_CORE_SH_DIR}/../bin/lib/core.profile
 
 primeDB_test_CORE_chunk_getPath(){
-  echo "TEST __primeDB_CORE_chunk_getPath()"
-  __primeDB_CORE_chunk_getPath
-  __primeDB_CORE_chunk_getPath 1
-  __primeDB_CORE_chunk_getPath 003
-  __primeDB_CORE_chunk_getPath 055
+  echo "TEST primeDB_CORE_chunk_getPath"
+  for i in $( seq 1 1 50 ); do
+    primeDB_CORE_chunk_getPath $i
+  done
 }
-
 
 primeDB_test_CORE_chunk_getCartouche(){
-  echo "TEST __primeDB_CORE_chunk_getCartouche"
-  __primeDB_CORE_chunk_getCartouche
-  __primeDB_CORE_chunk_getCartouche 1
-  __primeDB_CORE_chunk_getCartouche 003
-  __primeDB_CORE_chunk_getCartouche 055
+  echo "TEST primeDB_CORE_chunk_getCartouche"
+  for i in $( seq 1 1 50 ); do
+    primeDB_CORE_chunk_getCartouche $i
+  done
 }
 
-
-primeDB_test_CORE_chunk_getLine(){ 
-  echo "TEST __primeDB_CORE_chunk_getLine"
-  __primeDB_CORE_chunk_getLine 
-  __primeDB_CORE_chunk_getLine 1 1
-  __primeDB_CORE_chunk_getLine 3 3
-  __primeDB_CORE_chunk_getLine 55 55
+primeDB_test_CORE_chunk_getLine(){
+  echo "TEST primeDB_CORE_chunk_getLine"
+  for ch in $( seq 1 1 3 ); do
+    echo "=== ${ch} ==="
+    for of in $( seq 1 1 10 ); do
+      primeDB_CORE_chunk_getLine ${ch} ${of}
+    done
+  done
 }
-
 
 primeDB_test_CORE_chunk_line_getPrime (){
-  echo "TEST __primeDB_CORE_chunk_line_getPrime"
-  __primeDB_CORE_chunk_line_getPrime 1
-  __primeDB_CORE_chunk_line_getPrime 2
-  __primeDB_CORE_chunk_line_getPrime 3 
-  __primeDB_CORE_chunk_line_getPrime 1 10
-  __primeDB_CORE_chunk_line_getPrime 3 3 3
+  echo "TEST primeDB_CORE_chunk_line_getPrime"
+  for ch in $( seq 1 1 10 ); do
+    for ln in $( seq 1 1 3 ); do
+      echo "=== ${ch}.${ln} ==="
+      for of in $( seq 1 1 10 ); do
+        echo "[${of}] $( primeDB_CORE_chunk_line_getPrime ${ch} ${ln} ${of} )"
+      done
+    done
+  done
 }
 
 primeDB_test_CORE_chunk_line_getMinPrim(){
-  echo "TEST __primeDB_CORE_chunk_line_getMinPrime"
-  __primeDB_CORE_chunk_line_getMinPrime
-  __primeDB_CORE_chunk_line_getMinPrime 1 1
-  __primeDB_CORE_chunk_line_getMinPrime 3 78
+  echo "TEST primeDB_CORE_chunk_line_getMinPrime"
+  for ch in $( seq 1 1 10 ); do
+    for ln in $( seq 1 1 10 ); do
+      primeDB_CORE_chunk_line_getMinPrime ${ch} ${ln}
+    done
+  done
 }
-
-
 
 primeDB_test_CORE_chunk_line_getMaxPrime(){ 
-  echo "TEST __primeDB_CORE_chunk_line_getMaxPrime"
-  __primeDB_CORE_chunk_line_getMaxPrime 
-  __primeDB_CORE_chunk_line_getMaxPrime 1 1
-  __primeDB_CORE_chunk_line_getMaxPrime 3 78
+  echo "TEST primeDB_CORE_chunk_line_getMaxPrime"
+  for ch in $( seq 1 1 10 ); do
+    for ln in $( seq 1 1 10 ); do
+      primeDB_CORE_chunk_line_getMaxPrime ${ch} ${ln}
+    done
+  done
 }
 
-
-  
-
-
-
-
-
 primeDB_test_CORE_chunk_getMinPrime (){
-  echo "TEST __primeDB_CORE_chunk_getMinPrime"
-  __primeDB_CORE_chunk_getMinPrime 1
-  __primeDB_CORE_chunk_getMinPrime 2
-  __primeDB_CORE_chunk_getMinPrime 3
+  echo "TEST primeDB_CORE_chunk_getMinPrime"
+  for ch in $( seq 1 1 10 ); do
+    for ln in $( seq 1 1 10 ); do
+      primeDB_CORE_chunk_getMinPrime ${ch} ${ln}
+    done
+  done
 }
 
 primeDB_test_CORE_chunk_getMaxPrime (){
-  echo "TEST __primeDB_CORE_chunk_getMaxPrime"
-  __primeDB_CORE_chunk_getMaxPrime 1
-  __primeDB_CORE_chunk_getMaxPrime 2
-  __primeDB_CORE_chunk_getMaxPrime 3
+  echo "TEST primeDB_CORE_chunk_getMaxPrime"
+  for ch in $( seq 1 1 10 ); do
+    primeDB_CORE_chunk_getMaxPrime ${ch}
+  done
 }
-
-
 
 primeDB_test_CORE_chunk_countLines (){
-  echo "TEST __primeDB_CORE_chunk_countLines"
-  __primeDB_CORE_chunk_countLines 1
-  __primeDB_CORE_chunk_countLines 2
-  __primeDB_CORE_chunk_countLines 3
+  echo "TEST primeDB_CORE_chunk_countLines"
+  primeDB_CORE_chunk_countLines 1
 }
-
-
 
 primeDB_test_CORE_listChunksFile(){
-  echo "TEST __primeDB_CORE_listChunksFiles"
-  __primeDB_CORE_listChunksFiles
+  echo "TEST primeDB_CORE_listChunksFiles"
+  primeDB_CORE_listChunksFiles
 }
-
 
 primeDB_test_CORE_listChunksName(){
-echo "TEST __primeDB_CORE_listChunksNames"
-  __primeDB_CORE_listChunksNames
+  echo "TEST primeDB_CORE_listChunksNames"
+  primeDB_CORE_listChunksNames
 }
-
 
 primeDB_test_CORE_countChunk(){
-echo "TEST __primeDB_CORE_countChunks"
-  __primeDB_CORE_countChunks
+  echo "TEST primeDB_CORE_countChunks"
+  primeDB_CORE_countChunks
 }
-
-
 
 primeDB_test_CORE_getMaxPrim(){
-echo "TEST __primeDB_CORE_getMaxPrime"
-  __primeDB_CORE_getMaxPrime
+  echo "TEST primeDB_CORE_getMaxPrime"
+  primeDB_CORE_getMaxPrime
 }
-
-
 
 primeDB_test_CORE_chunk_getNt(){
-echo "TEST __primeDB_CORE_chunk_getNth"
-  __primeDB_CORE_chunk_getNth
-  __primeDB_CORE_chunk_getNth 1
-  __primeDB_CORE_chunk_getNth 1 1
-  __primeDB_CORE_chunk_getNth 1 2
-  __primeDB_CORE_chunk_getNth 1 8
-  __primeDB_CORE_chunk_getNth 1 9
+  echo "TEST primeDB_CORE_chunk_getNth"
+  for ch in $( seq 1 1 3 ); do
+    echo "=== ${ch} ==="
+    for of in $( seq 1 1 10 ); do
+      primeDB_CORE_chunk_getNth ${ch} ${of}
+    done
+  done
 }
 
-
-primeDB_test_CORE(){
-
+runAll(){
+  primeDB_test_CORE_chunk_getPath
+  primeDB_test_CORE_chunk_getCartouche
+  primeDB_test_CORE_chunk_getLine
+  primeDB_test_CORE_chunk_line_getPrime
+  primeDB_test_CORE_chunk_line_getMinPrim
+  primeDB_test_CORE_chunk_line_getMaxPrime
+  primeDB_test_CORE_chunk_getMinPrime
+  primeDB_test_CORE_chunk_getMaxPrime
+  primeDB_test_CORE_chunk_countLines
+  primeDB_test_CORE_listChunksFile
+  primeDB_test_CORE_listChunksName
+  primeDB_test_CORE_countChunk
+  primeDB_test_CORE_getMaxPrim
+  primeDB_test_CORE_chunk_getNt
 }
-
-
-
+runAll
