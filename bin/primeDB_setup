@@ -13,19 +13,19 @@
 # - Renomage des fichiers pour pouvoir automatiser les calculs
 # - Sauvegarde du répertoire ( permet le traitement du setup offline )
 
-primeDB_SETUP_SH="$( realpath $0 )"
-primeDB_SETUP_SH_DIR="$( dirname ${primeDB_SETUP_SCRIPT} )"
+primeDB_SETUP_SH="${BASH_SOURCE[0]:-$(realpath ${0})}"
+primeDB_SETUP_SH_DIR="$( dirname ${primeDB_SETUP_SH} )"
 
 #
-# Mise à jour des variables d'environnement
+# Gestion des erreurs
 #
-check_env_or_update(){
-  if [ -z ${primeDB_SETUP_PROFILE}+UNKNOW_PROFILE ];
-  then
-    echo ".. INFO sourcing setup profile"
-    source "${primeDB_SETUP_SH_DIR}/lib/setup.profile"
-  fi
-}
+source ${primeDB_SETUP_SH_DIR}/lib/error.profile
+
+#
+# Import des dépendances
+#
+source ${primeDB_SETUP_SH_DIR}/lib/base.profile
+source ${primeDB_SETUP_SH_DIR}/lib/setup.profile
 
 #
 # Installation des données
@@ -40,5 +40,4 @@ primeDB_setup(){
   echo ".. INFO setup done"
 }
 
-check_env_or_update
 primeDB_setup

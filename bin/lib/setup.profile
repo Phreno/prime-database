@@ -9,19 +9,8 @@
 #
 # Fonctions utilitaires pour l'installation de la base de données
 
-primeDB_SETUP_PROFILE="$( realpath $0 )"
-primeDB_SETUP_PROFILE_DIR="$( dirname ${primeDB_SETUP_SCRIPT} )"
-
-#
-# Mise à jour des variables d'environnement
-#
-check_env_or_update(){
-  if [ -z ${primeDB_PROFILE}+UNKNOW_PROFILE ];
-  then
-    echo ".. INFO sourcing primeDB profile"
-    source "../../primeDB.profile"
-  fi
-}
+primeDB_SETUP_PROFILE="${BASH_SOURCE[0]:-$(realpath ${0})}"
+primeDB_SETUP_PROFILE_DIR="$( dirname ${primeDB_SETUP_PROFILE} )"
 
 #
 # Télécharge tous les fichier zip disponibles à l'URL
@@ -31,6 +20,7 @@ primeDB_setup_downloadPrimes(){
   folder="${1:-${primeDB_DATA_DIR?}}"
   url="${2:-${primeDB_ZIP_URL?}}"
   format="${3:-${primeDB_DATA_FORMAT?}}"
+
   echo ".. INFO download primes archive from ${url} into ${folder}"
   wget -P ${folder} -r -np -nd -l 1 -A ${format} ${url}
   echo ".. INFO download done"
@@ -52,7 +42,7 @@ primeDB_setup_cleanFolder(){
 #
 primeDB_setup_removeData(){
   folder="${1:-${primeDB_DATA_DIR?}}"
-  echo ".. INFO delete primes data"
+  echo ".. INFO delete possible previous install"
   rm -rf ${folder}
   echo ".. INFO delete done"
 }
@@ -61,7 +51,7 @@ primeDB_setup_removeData(){
 # Sauvegarde les données
 #
 primeDB_setup_backupData(){
-  folder="$( basename ${1:-${primeDB_DATA_DIR?}} )"
+  folder="${1:-${primeDB_DATA_DIR?}}"
   archive="${2:-${primeDB_ARCHIVE?}}"
   echo ".. INFO backup data into ${archive}"
   tar cvf ${archive} ${folder}
@@ -84,14 +74,19 @@ primeDB_setup_restoreData(){
 #
 primeDB_setup_normalizeDatafileName(){
   folder="${1:-${primeDB_DATA_DIR?}}"
-  currentFolder="$(pwd)"
-  cd ${folder}
-  for f in primes[0-9]*; 
+  padding="${2:-${primeDB_DATA_PADDING?}}"
+  format="${3:-${primeDB_DATA_FORMAT?}}"
+  prefix="primes"
+  allChunks="${folder}/primes[0-9]*"
+
+  for chunk in $allChunks;
   do
-    indice="$( printf ${primeDB_PADDING?} ${${f#primes}%.${primeDB_DATA_FORMAT?}} )"
-    new="${indice}.${primeDB_DATA_FORMAT?}"
-    echo "moving ${f} to ${new}"
-    mv ${f} ${new};
+    indice=$( basename $chunk )
+    indice=${indice#${prefix}}
+    indice=${indice%.${format}}
+    indice=$( printf ${padding} ${indice} )
+    new="$( dirname $chunk )/${indice}.${format}"
+    echo "moving ${chunk} to ${new}"
+    mv ${chunk} ${new}
   done
-  cd ${currentFolder}
 }

@@ -1,12 +1,34 @@
-!!! DOCUMENTATION OBSOLÈTE !!!
+# primeDB
 
-# primeDatabase
+primeDB est un utilitaire qui permet de travailler sur une base de 50 Millions de nombres premiers.
+Le propos de cette applications et d'économiser les temps de calcul en préférant la recherche à la décomposition de facteur.
 
-Base de données de nombres premier
+# Installation
 
-# Développement en cours
+## Téléchargement de la banque de données
 
-pour installer:
+L'installation télécharge les fichiers depuis http://primes.utm.edu/lists/small/millions dans le dossier ./primeDatabase/data
 
-  source .profile
-  primeDB_setup
+  git clone https://github.com/Phreno/primeDatabase.git
+  ./primeDatabase/bin/primeDB_setup
+
+## Backup
+
+Étant tributaire de la disponnibilité des fichiers, pendant l'installation une sauvegarde est faite dans ./primeDatabase/.data.tar
+
+## Visibilité des fonctionnalités
+
+Pour utiliser l'application depuis n'importe où pendant la durée de la session
+
+  PATH="${PATH}:$(pwd)/primeDatabase/bin"
+
+# Usage
+
+## Liste des fonctionnalités à implémenter
+
+- getNth
+- getAfter
+- getBefore
+- getUntil
+- getBetween
+- isPrime

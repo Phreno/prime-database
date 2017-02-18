@@ -3,8 +3,8 @@
 # [K3rn€l_P4n1k]
 # ..............
 
-primeDB_PROFILE="$( realpath $0 )"
-primeDB_DIR="$( dirname ${primeDB_DIR} )"
+primeDB_BASE_PROFILE="${BASH_SOURCE[0]:-$(realpath ${0})}"
+primeDB_BASE_PROFILE_DIR="$( dirname ${primeDB_BASE_PROFILE} )"
 
 # ==========
 # SETUP NEED
@@ -19,10 +19,6 @@ export primeDB_ZIP_URL="http://primes.utm.edu/lists/small/millions"
 # CONSTANTS
 # =========
 
-#
-# Padding utilisé pour nommer les chunks
-#
-export primeDB_PADDING="%05d"
 
 #
 # Chaque chunk dispose d'un header de 2 lignes
@@ -51,14 +47,25 @@ export primeDB_CHUNK_LINES=125000 # Without cartouche
 #
 # DATA
 #
+export primeDB_DIR="${primeDB_BASE_PROFILE_DIR/\/bin\/lib/}"
+# Location des chunks
 export primeDB_DATA_DIR="${primeDB_DIR}/data"
+# Compression des chunks
 export primeDB_DATA_FORMAT="zip"
+# Padding utilisé pour nommer les chunks
+export primeDB_DATA_PADDING="%05d"
 
-for chunk in "${primeDB_DATA_DIR}/*.${primeDB_DATA_FORMAT}";
-do
-  chunkName="basename ${chunk%.${primeDB_DATA_FORMAT}}"
-  export $( echo primeDB_CHUNK_${chunkName} )="${chunk}"
-done;
+#TODO FIXME export chunkFiles
+# chunkFiles="${primeDB_DATA_DIR}/*.${primeDB_DATA_FORMAT}"
+#
+# for chunk in $chunkFiles;
+# do
+#  chunkName="$( basename ${chunk%.${primeDB_DATA_FORMAT}} )"
+#  echo $chunkName
+#  export $( echo primeDB_CHUNK_${chunkName} )="${chunk}"
+# done;
+# echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+# exit 1;
 
 #
 # BIN

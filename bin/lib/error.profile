@@ -4,7 +4,6 @@
 # http://stackoverflow.com/a/13099228/4585214
 # -------------------------------------------
 # edited Dec 16 '13 at 9:55
-# community wiki
 # 7 revs
 # Luca Borrione
 #
