@@ -74,8 +74,8 @@ primeDB_CORE_chunk_line_getMaxPrime(){
 #
 primeDB_CORE_chunk_line_getMinPrime(){
   chunkIndex=${1:-1}
-  line=${1:-1}
-  offset=1
+  line=${2:-1}
+  offset=${3:-1}
   primeDB_CORE_chunk_line_getPrime ${chunkIndex} ${line} ${offset}
 }
 
@@ -159,6 +159,7 @@ primeDB_CORE_getCandidateChunk(){
   entry=${1:-1}
   guess=${2:-1}
   limit=${3:-"$( primeDB_CORE_countChunks )"}
+
   while [ ${entry} -ge $( primeDB_CORE_chunk_getMinPrime ${guess} ) ]; do
     guess=$(( $guess + 1 ))
     if [ "${guess}" -gt "${limit}" ]; then
@@ -166,23 +167,26 @@ primeDB_CORE_getCandidateChunk(){
       exit 1
     fi
   done
+
   echo "${guess}"
 }
 
 #
 # Récupère la ligne au sein de laquelle est contenu le nombre
-#
+# FIXME
 primeDB_CORE_chunk_getCandidateLine(){
   chunk=${1:-1}
-  entry=${2:-$( primeDB_CORE_chunk_getMinPrime ${chunk} )}
+  entry=${2:-1}
   guess=${3:-1}
   limit=${4:-"${primeDB_CHUNK_LINES}"}
-  while [ ${entry} -ge $( primeDB_CORE_chunk_line_getMinPrime ${guess} )]; do
+  while [ "${entry}" -ge "$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${guess} )"]; do
+    echo $guess
     guess=$(( ${guess} + 1 ))
     if [ ${guess} -gt ${limit} ]; then
       echo "ERR primeDB_CORE_chunk_getCandidateLine: guess growing up"
       exit 1
     fi
   done
-  echo ${guess}
+
+  echo "${guess}"
 }
