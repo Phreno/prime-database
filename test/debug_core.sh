@@ -142,12 +142,17 @@ primeDB_test_CORE_chunk_getCandidateLine(){
   ch=1
   echo "=== chunk ${ch} ==="
   for line in $( seq 1 1 ${primeDB_CHUNK_LINES} );do
-    echo "."
     min=$( primeDB_CORE_chunk_line_getMinPrime ${ch} ${line} )
     max=$( primeDB_CORE_chunk_line_getMaxPrime ${ch} ${line} )
-    echo "[ln:${line} min:${min}] $( primeDB_CORE_chunk_getCandidateLine ${ch} ${min} )"
-    echo "[ln:${line} max:${max}] $( primeDB_CORE_chunk_getCandidateLine ${ch} ${max} )"
+    lineMin="$( primeDB_CORE_chunk_getCandidateLine ${ch} ${min} )"
+    lineMax="$( primeDB_CORE_chunk_getCandidateLine ${ch} ${max} )"
+    echo "[ln:${line}] [min:${min} lineMin:${lineMin}] [max:${max} lineMax:${lineMax}]"
   done
+}
+
+primeDB_test_CORE_isPrime(){
+  echo "TEST primeDB_test_CORE_isPrime"
+
 }
 
 run(){
@@ -166,7 +171,8 @@ run(){
   #primeDB_test_CORE_getMaxPrim
   #primeDB_test_CORE_chunk_getNt
   #primeDB_test_CORE_getCandidateChunk
-  primeDB_test_CORE_chunk_getCandidateLine
+  #primeDB_test_CORE_chunk_getCandidateLine
+  primeDB_test_CORE_isPrime
 }
 
 run
