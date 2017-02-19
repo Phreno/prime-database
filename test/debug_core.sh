@@ -123,8 +123,22 @@ primeDB_test_CORE_chunk_getNt(){
   for ch in $( seq 1 1 3 ); do
     echo "=== ${ch} ==="
     for of in $( seq 1 1 10 ); do
-      primeDB_CORE_chunk_getNth ${ch} ${of}
+      echo "[${ch}.${of}] $( primeDB_CORE_chunk_getNth ${ch} ${of} )"
     done
+  done
+}
+
+primeDB_test_CORE_getCandidateChunk(){
+  echo "TEST primeDB_test_CORE_getCandidateChunk"
+  bottom=1
+  top=999995
+
+  for chunk in $( seq 1 1 50 ); do
+    echo "=== chunk ${chunk} ==="
+    min=$( primeDB_CORE_chunk_getMinPrime ${chunk} )
+    max=$( primeDB_CORE_chunk_getMaxPrime ${chunk} )
+    echo "[${min}] $( primeDB_CORE_getCandidateChunk ${min} )"
+    echo "[${max}] $( primeDB_CORE_getCandidateChunk ${max} )"
   done
 }
 
@@ -143,5 +157,7 @@ runAll(){
   primeDB_test_CORE_countChunk
   primeDB_test_CORE_getMaxPrim
   primeDB_test_CORE_chunk_getNt
+  primeDB_test_CORE_getCandidateChunk
 }
-runAll
+primeDB_test_CORE_getCandidateChunk
+# runAll

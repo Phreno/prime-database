@@ -139,7 +139,7 @@ primeDB_CORE_getMaxPrime(){
 }
 
 #
-# chunk_getNth
+# Récupère le nième élément d'un chunk
 #
 primeDB_CORE_chunk_getNth(){
   chunk=${1:-1}
@@ -149,7 +149,21 @@ primeDB_CORE_chunk_getNth(){
   line=$(( ${stepBack} / ${primeDB_COLUMNS} ))
   lineCursor=$(( ${line} + 1 ))
   offsetCursor=$(( ${offset} + 1 ))
-  result=$( primeDB_CORE_chunk_line_getPrime ${chunk} ${lineCursor} ${offsetCursor} )
-  echo "nth.${nth} offset.${offset} line.${line} lineCursor.${lineCursor} offsetCursor.${offsetCursor} [${result}] $( primeDB_CORE_chunk_getLine ${chunk} ${lineCursor} )"
+  primeDB_CORE_chunk_line_getPrime ${chunk} ${lineCursor} ${offsetCursor}
 }
 
+#
+# Récupère le chunk au sein duquel est contenu le nombre
+#
+primeDB_CORE_getCandidateChunk(){
+  entry=${1:-1}
+  guess=1
+  while [ ${entry} -ge $( primeDB_CORE_chunk_getMinPrime ${guess} ) ]; do
+    guess=$(( $guess + 1 ))
+  done
+  echo "${guess}"
+}
+
+#
+# Récupère la ligne au sein de laquelle est contenu le nombre
+#
