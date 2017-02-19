@@ -130,9 +130,6 @@ primeDB_test_CORE_chunk_getNt(){
 
 primeDB_test_CORE_getCandidateChunk(){
   echo "TEST primeDB_test_CORE_getCandidateChunk"
-  bottom=1
-  top=999995
-
   for chunk in $( seq 1 1 50 ); do
     echo "=== chunk ${chunk} ==="
     min=$( primeDB_CORE_chunk_getMinPrime ${chunk} )
@@ -142,6 +139,15 @@ primeDB_test_CORE_getCandidateChunk(){
   done
 }
 
+primeDB_test_CORE_chunk_getCandidateLine(){
+  echo "TEST primeDB_test_CORE_chunk_getCandidateLine"
+  for line in $( seq 1 1 ${primeDB_CHUNK_LINES} );do
+    min=$( primeDB_CORE_chunk_line_getMinPrime ${line} )
+    max=$( primeDB_CORE_chunk_line_getMaxPrime ${line} )
+    echo "[${min}] $( primeDB_CORE_chunk_getCandidateLine ${min} )"
+    echo "[${max}] $( primeDB_CORE_chunk_getCandidateLine ${max} )"
+  done
+}
 runAll(){
   primeDB_test_CORE_chunk_getPath
   primeDB_test_CORE_chunk_getCartouche
@@ -158,6 +164,8 @@ runAll(){
   primeDB_test_CORE_getMaxPrim
   primeDB_test_CORE_chunk_getNt
   primeDB_test_CORE_getCandidateChunk
+  primeDB_test_CORE_chunk_getCandidateLine
 }
 primeDB_test_CORE_getCandidateChunk
+primeDB_test_CORE_chunk_getCandidateLine
 # runAll

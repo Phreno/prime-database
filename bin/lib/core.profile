@@ -157,9 +157,14 @@ primeDB_CORE_chunk_getNth(){
 #
 primeDB_CORE_getCandidateChunk(){
   entry=${1:-1}
-  guess=1
+  guess=${2:-1}
+  limit=${3:-"$( primeDB_CORE_countChunks )"}
   while [ ${entry} -ge $( primeDB_CORE_chunk_getMinPrime ${guess} ) ]; do
     guess=$(( $guess + 1 ))
+    if [ "${guess}" -gt "${limit}" ]; then
+      echo "ERR primeDB_CORE_getCandidateChunk: guess growing up"
+      exit 1
+    fi
   done
   echo "${guess}"
 }
@@ -167,3 +172,17 @@ primeDB_CORE_getCandidateChunk(){
 #
 # Récupère la ligne au sein de laquelle est contenu le nombre
 #
+primeDB_CORE_chunk_getCandidateLine(){
+  chunk=${1:-1}
+  entry=${2:-$( primeDB_CORE_chunk_getMinPrime ${chunk} )}
+  guess=${3:-1}
+  limit=${4:-"${primeDB_CHUNK_LINES}"}
+  while [ ${entry} -ge $( primeDB_CORE_chunk_line_getMinPrime ${guess} )]; do
+    guess=$(( ${guess} + 1 ))
+    if [ ${guess} -gt ${limit} ]; then
+      echo "ERR primeDB_CORE_chunk_getCandidateLine: guess growing up"
+      exit 1
+    fi
+  done
+  echo ${guess}
+}
