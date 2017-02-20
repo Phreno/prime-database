@@ -176,7 +176,7 @@ primeDB_CORE_getCandidateChunk(){
 # 
 # Récupère la ligne au sein de laquelle est contenu le nombre
 #
-primeDB_CORE_chunk_getCandidateLine(){
+primeDB_CORE_chunk_getCandidateLine_linear(){
   chunk=${1:-1}
   entry=${2:-1}
   guess=${3:-1}
@@ -188,6 +188,57 @@ primeDB_CORE_chunk_getCandidateLine(){
   done
   echo $(( ${guess} -1 ))
 }
+
+
+# TODO
+# Essai en dichotomique
+#
+
+#1 Indice entier i, l, r
+#2 l = 1
+#3 r = N
+#4 i = b(l + r)/2c
+#5 while ((k 6= T[i]) ∧ (l ≤ r)) do
+#6 if (k < T[i]) then
+#7 r = i − 1
+#8 else
+#9 l = i + 1
+#10 i = b(l + r)/2c
+#11 if (k == T[i]) then
+#12 retourner i
+#13 else
+#14 retourner −1
+
+primeDB_CORE_chunk_getCandidatLine(){
+  chunk=${1:-1}
+  search=${2:-1}
+
+  left=1
+  right=${primeDB_CHUNK_LINES}
+  index= $(( (${left} + ${right}) / 2 ))
+}
+
+# TODO
+# Est ce qu'un nombre se situe sur une ligne
+#
+# Est situé sur la ligne, tout nombre
+# dont la valeur est comprise entre la première valeur de la ligne,
+# et la première valeur de la ligne suivante.
+primeDB_CORE_chunk_line_isIncludedIn(){
+  chunk=${1:-1}
+  line=${2:-1}
+  value=${3:-1}
+
+  start=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${line} )
+  end=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} $(( ${line} + 1 )) )
+
+  result=-1
+  if [ ${value} -ge ${start} ] && [ ${value} -lt ${end} ]; then
+    result=${value}
+  fi
+  echo ${result}
+}
+
 
 # TODO
 # Est ce qu'un nombre est premier
