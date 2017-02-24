@@ -40,6 +40,12 @@ export primeDB_CHUNK_SIZE=125002  # Including cartouche
 #
 export primeDB_CHUNK_LINES=125000 # Without cartouche
 
+#
+# Le nombre de nombres premiers par chunks
+#
+export primeDB_CHUNK_COUNT=1000000
+
+
 # =======================
 # DIR & FILE MANAGMENT
 # =======================

@@ -150,6 +150,22 @@ primeDB_test_CORE_chunk_getCandidateLine(){
   done
 }
 
+primeDB_test_CORE_chunk_line_isIncludedIn(){
+  echo "TEST primeDB_test_CORE_chunk_line_isIncludedIn"
+  chunk=1
+  for line in $( seq 1 1 ${primeDB_CHUNK_LINES} );do
+    min=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${line} )
+    max=$( primeDB_CORE_chunk_line_getMaxPrime ${chunk} ${line} )
+    first=$(( min -  10 ))
+    last=$(( max + 10 ))
+    
+    for value in $( seq ${min} 1 ${max} ); do
+      primeDB_CORE_chunk_line_isIncludedIn ${chunk} ${line} ${value}
+    done
+
+  done
+}
+    
 primeDB_test_CORE_isPrime(){
   echo "TEST primeDB_test_CORE_isPrime"
 
@@ -171,8 +187,9 @@ run(){
   #primeDB_test_CORE_getMaxPrim
   #primeDB_test_CORE_chunk_getNt
   #primeDB_test_CORE_getCandidateChunk
+  primeDB_test_CORE_chunk_line_isIncludedIn
   #primeDB_test_CORE_chunk_getCandidateLine
-  primeDB_test_CORE_isPrime
+  #primeDB_test_CORE_isPrime
 }
 
 run

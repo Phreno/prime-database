@@ -209,13 +209,14 @@ primeDB_CORE_chunk_getCandidateLine_linear(){
 #13 else
 #14 retourner −1
 
-primeDB_CORE_chunk_getCandidatLine(){
+primeDB_CORE_chunk_getCandidateLine(){
   chunk=${1:-1}
   search=${2:-1}
 
   left=1
   right=${primeDB_CHUNK_LINES}
   index= $(( (${left} + ${right}) / 2 ))
+
 }
 
 # TODO
@@ -231,12 +232,13 @@ primeDB_CORE_chunk_line_isIncludedIn(){
 
   start=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${line} )
   end=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} $(( ${line} + 1 )) )
-
+  echo ${start}
+  echo ${end}
   result=-1
-  if [ ${value} -ge ${start} ] && [ ${value} -lt ${end} ]; then
+  if [ $(( ${value} )) -ge $(( ${start} )) ] && [ $(( ${value} )) -lt $(( ${end} )) ]; then
     result=${value}
   fi
-  echo ${result}
+ ${result}
 }
 
 
