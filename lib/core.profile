@@ -17,7 +17,7 @@ primeDB_CORE_PROFILE_DIR="$( dirname ${primeDB_CORE_PROFILE} )"
 #
 primeDB_CORE_chunk_getPath(){
   chunkIndex=${1:-1}
-  chunkPathTemplate="${primeDB_DATA_DIR}/${primeDB_DATA_PADDING}.${primeDB_DATA_COMPRESSION}"
+  chunkPathTemplate="${primeDB_DATA_DIR}/${primeDB_DATA_PADDING}"
   echo "$( printf ${chunkPathTemplate} ${chunkIndex} )"
 }
 
@@ -27,7 +27,7 @@ primeDB_CORE_chunk_getPath(){
 primeDB_CORE_chunk_get(){
   chunkIndex=${1:-1}
   chunk=$(primeDB_CORE_chunk_getPath ${chunkIndex})
-  unzip -qq -c ${chunk}
+  cat ${chunk}
 }
 
 #
@@ -112,8 +112,8 @@ primeDB_CORE_chunk_countLines(){
 #
 # Liste les chunk disponibles
 #
-primeDB_CORE_listChunksFil(){
-  l -1 ${primeDB_DATA_DIR}/*.zip
+primeDB_CORE_listChunksFiles(){
+  ls -1 ${primeDB_DATA_DIR}/[0-9]*
 }
 
 #

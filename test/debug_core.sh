@@ -15,13 +15,13 @@ primeDB_DEBUG_CORE_SH_DIR="$( dirname ${primeDB_DEBUG_CORE_SH} )"
 #
 # Gestion des erreurs
 #
-source ${primeDB_DEBUG_CORE_SH_DIR}/../bin/lib/error.profile
+source ${primeDB_DEBUG_CORE_SH_DIR}/../lib/error.profile
 
 #
 # Import des dépendances
 #
-source ${primeDB_DEBUG_CORE_SH_DIR}/../bin/lib/base.profile
-source ${primeDB_DEBUG_CORE_SH_DIR}/../bin/lib/core.profile
+source ${primeDB_DEBUG_CORE_SH_DIR}/../lib/base.profile
+source ${primeDB_DEBUG_CORE_SH_DIR}/../lib/core.profile
 
 primeDB_test_CORE_chunk_getPath(){
   echo "TEST primeDB_CORE_chunk_getPath"
@@ -60,7 +60,7 @@ primeDB_test_CORE_chunk_line_getPrime (){
 
 primeDB_test_CORE_chunk_line_getMinPrim(){
   echo "TEST primeDB_CORE_chunk_line_getMinPrime"
-  ch=2
+  ch=1
   for ln in $( seq 1 1 ${primeDB_CHUNK_LINES} ); do
     echo "[${ln}] $( primeDB_CORE_chunk_line_getMinPrime ${ch} ${ln} )"
   done
@@ -68,10 +68,9 @@ primeDB_test_CORE_chunk_line_getMinPrim(){
 
 primeDB_test_CORE_chunk_line_getMaxPrime(){ 
   echo "TEST primeDB_CORE_chunk_line_getMaxPrime"
-  for ch in $( seq 1 1 10 ); do
-    for ln in $( seq 1 1 10 ); do
-      primeDB_CORE_chunk_line_getMaxPrime ${ch} ${ln}
-    done
+  ch=1
+  for ln in $( seq 1 1 ${primeDB_CHUNK_LINES} ); do
+    echo "[${ln}] $( primeDB_CORE_chunk_line_getMaxPrime ${ch} ${ln} )"
   done
 }
 
@@ -126,52 +125,8 @@ primeDB_test_CORE_chunk_getNt(){
   done
 }
 
-primeDB_test_CORE_getCandidateChunk(){
-  echo "TEST primeDB_test_CORE_getCandidateChunk"
-  for chunk in $( seq 1 1 50 ); do
-    echo "=== chunk ${chunk} ==="
-    min=$( primeDB_CORE_chunk_getMinPrime ${chunk} )
-    max=$( primeDB_CORE_chunk_getMaxPrime ${chunk} )
-    echo "[${min}] $( primeDB_CORE_getCandidateChunk ${min} )"
-    echo "[${max}] $( primeDB_CORE_getCandidateChunk ${max} )"
-  done
-}
-
-primeDB_test_CORE_chunk_getCandidateLine(){
-  echo "TEST primeDB_test_CORE_chunk_getCandidateLine"
-  ch=1
-  echo "=== chunk ${ch} ==="
-  for line in $( seq 1 1 ${primeDB_CHUNK_LINES} );do
-    min=$( primeDB_CORE_chunk_line_getMinPrime ${ch} ${line} )
-    max=$( primeDB_CORE_chunk_line_getMaxPrime ${ch} ${line} )
-    lineMin="$( primeDB_CORE_chunk_getCandidateLine ${ch} ${min} )"
-    lineMax="$( primeDB_CORE_chunk_getCandidateLine ${ch} ${max} )"
-    echo "[ln:${line}] [min:${min} lineMin:${lineMin}] [max:${max} lineMax:${lineMax}]"
-  done
-}
-
-primeDB_test_CORE_chunk_line_isIncludedIn(){
-  echo "TEST primeDB_test_CORE_chunk_line_isIncludedIn"
-  chunk=1
-  for line in $( seq 1 1 ${primeDB_CHUNK_LINES} );do
-    min=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${line} )
-    max=$( primeDB_CORE_chunk_line_getMaxPrime ${chunk} ${line} )
-    first=$(( min -  10 ))
-    last=$(( max + 10 ))
-    
-    for value in $( seq ${min} 1 ${max} ); do
-      primeDB_CORE_chunk_line_isIncludedIn ${chunk} ${line} ${value}
-    done
-
-  done
-}
-    
-primeDB_test_CORE_isPrime(){
-  echo "TEST primeDB_test_CORE_isPrime"
-
-}
-
 run(){
+  echo ">> RUNNING test"
   #primeDB_test_CORE_chunk_getPath
   #primeDB_test_CORE_chunk_getCartouche
   #primeDB_test_CORE_chunk_getLine
@@ -186,10 +141,6 @@ run(){
   #primeDB_test_CORE_countChunk
   #primeDB_test_CORE_getMaxPrim
   #primeDB_test_CORE_chunk_getNt
-  #primeDB_test_CORE_getCandidateChunk
-  primeDB_test_CORE_chunk_line_isIncludedIn
-  #primeDB_test_CORE_chunk_getCandidateLine
-  #primeDB_test_CORE_isPrime
 }
 
 run

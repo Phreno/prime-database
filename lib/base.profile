@@ -53,7 +53,7 @@ export primeDB_CHUNK_COUNT=1000000
 #
 # DATA
 #
-export primeDB_DIR="${primeDB_BASE_PROFILE_DIR/\/bin\/lib/}"
+export primeDB_DIR="${primeDB_BASE_PROFILE_DIR/\/lib/}"
 # Location des chunks
 export primeDB_DATA_DIR="${primeDB_DIR}/data"
 # Compression des chunks

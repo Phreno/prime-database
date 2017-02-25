@@ -19,14 +19,14 @@ primeDB_SETUP_SH_DIR="$( dirname ${primeDB_SETUP_SH} )"
 #
 # Gestion des erreurs
 #
-source ${primeDB_SETUP_SH_DIR}/lib/error.profile
+source "${primeDB_SETUP_SH_DIR}/../lib/error.profile"
 
 #
 # Import des dépendances
 #
-source ${primeDB_SETUP_SH_DIR}/lib/base.profile
-source ${primeDB_SETUP_SH_DIR}/lib/core.profile
-source ${primeDB_SETUP_SH_DIR}/lib/setup.profile
+source "${primeDB_SETUP_SH_DIR}/../lib/base.profile"
+source "${primeDB_SETUP_SH_DIR}/../lib/core.profile"
+source "${primeDB_SETUP_SH_DIR}/../lib/setup.profile"
 
 #
 # Téléchargement des données à installer
@@ -50,4 +50,4 @@ primeDB_extract(){
 # primeDB_download
 # primeDB_extract
 # primeDB_setup_backupData
-primeDB_SETUP_SH
+primeDB_setup_createDB

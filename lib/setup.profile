@@ -120,7 +120,8 @@ primeDB_setup_removeZipFiles(){
 # Crée la base de données
 #
 primeDB_setup_createDB(){
-  database="${1:-${primeDB_DATA_DIR?}}"
-  sqlite3 "${database}"
-  
+  database="${1:-${primeDB_DATABASE?}}"
+  script="${2:-${primeDB_SQL_CREATE?}}"
+  cat "${script}" | sqlite3 "${database}"
 }
+
