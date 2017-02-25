@@ -19,7 +19,7 @@ primeDB_SETUP_PROFILE_DIR="$( dirname ${primeDB_SETUP_PROFILE} )"
 primeDB_setup_downloadPrimes(){
   folder="${1:-${primeDB_DATA_DIR?}}"
   url="${2:-${primeDB_ZIP_URL?}}"
-  format="${3:-${primeDB_DATA_FORMAT?}}"
+  format="${3:-${primeDB_DATA_COMPRESSION?}}"
 
   echo ".. INFO download primes archive from ${url} into ${folder}"
   wget -P ${folder} -r -np -nd -l 1 -A ${format} ${url}
@@ -59,6 +59,21 @@ primeDB_setup_backupData(){
 }
 
 #
+# Décompresse les fichiers
+#
+primeDB_setup_unzipPrimes(){
+  primesLocation="${1:-${primeDB_DATA_DIR?}}"
+  echo ".. INFO extracting primes"
+  for file in $( find "${primesLocation}" -name "*.zip" ); do
+    echo "DEBUG file ${file}"
+    echo "DEBUG primesLocation ${primesLocation}"
+    unzip "${file}" -d "${primesLocation}";
+  done
+  echo ".. INFO extraction done"
+}
+
+
+#
 # Restaure les données
 #
 primeDB_setup_restoreData(){
@@ -70,14 +85,15 @@ primeDB_setup_restoreData(){
 }
 
 #
-# Normalise les indices suffixées sur les noms de fichier
+# Normalise les indices suffixées sur les noms de fichier.
+# Permet le tri par ordre croissant (on veut éviter un tri sur plusieurs millions de lignes)
 #
 primeDB_setup_normalizeDatafileName(){
   folder="${1:-${primeDB_DATA_DIR?}}"
   padding="${2:-${primeDB_DATA_PADDING?}}"
-  format="${3:-${primeDB_DATA_FORMAT?}}"
+  format="${3:-${primeDB_DATA_EXT?}}"
   prefix="primes"
-  allChunks="${folder}/primes[0-9]*"
+  allChunks="${folder}/${prefix}*.${format}"
 
   for chunk in $allChunks;
   do

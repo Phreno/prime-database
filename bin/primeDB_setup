@@ -28,16 +28,17 @@ source ${primeDB_SETUP_SH_DIR}/lib/base.profile
 source ${primeDB_SETUP_SH_DIR}/lib/setup.profile
 
 #
-# Installation des données
+# Téléchargement des données à installer
 #
-primeDB_setup(){
-  echo ".. INFO setup primeDB"
+primeDB_downloadDataAndBackup(){
+  echo ".. INFO download primeDB data"
   primeDB_setup_removeData
   primeDB_setup_downloadPrimes
   primeDB_setup_cleanFolder
-  primeDB_setup_normalizeDatafileName
-  primeDB_setup_backupData
-  echo ".. INFO setup done"
+  echo ".. INFO download done"
 }
 
-primeDB_setup
+# primeDB_downloadDataAndBackup
+primeDB_setup_unzipPrimes
+primeDB_setup_normalizeDatafileName
+#primeDB_setup_backupData

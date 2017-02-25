@@ -17,7 +17,7 @@ primeDB_CORE_PROFILE_DIR="$( dirname ${primeDB_CORE_PROFILE} )"
 #
 primeDB_CORE_chunk_getPath(){
   chunkIndex=${1:-1}
-  chunkPathTemplate="${primeDB_DATA_DIR}/${primeDB_DATA_PADDING}.${primeDB_DATA_FORMAT}"
+  chunkPathTemplate="${primeDB_DATA_DIR}/${primeDB_DATA_PADDING}.${primeDB_DATA_COMPRESSION}"
   echo "$( printf ${chunkPathTemplate} ${chunkIndex} )"
 }
 
