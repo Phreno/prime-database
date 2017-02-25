@@ -123,7 +123,7 @@ primeDB_setup_createDB(){
   database="${1:-${primeDB_DATABASE?}}"
   script="${2:-${primeDB_SQL_CREATE?}}"
 
-  rm "${database}"
+  rm "${database}" -f
   cat "${script}" | sqlite3 "${database}"
 }
 
@@ -144,16 +144,49 @@ primeDB_setup_chunk_loadLine(){
     if (( ${i} < 9 )); then
       anchor="@${i}"
       pattern="s/${anchor}/${prime}/g ; ${pattern}"
-      echo "---------"
-      echo "${anchor}"
-      echo "${line}"
-      echo "${pattern}"
     fi
     i=$(( i + 1 ))
   done
   sqlTemplate="$( echo "${sqlTemplate}" | sed "${pattern}")"
-  echo ${sqlTemplate}
   echo ${sqlTemplate} | sqlite3 "${primeDB_DATABASE}"
-  echo "select * from prime;" | sqlite3 "${primeDB_DATABASE}"
 }
 
+# UGLY PERF
+# Insère un chunk en base de données
+#
+primeDB_setup_loadChunk_lineByLine(){
+  chunk="${1:-1}"
+  for ln in $( seq 1 1 "${primeDB_CHUNK_LINES}" ); do
+    primeDB_setup_chunk_loadLine "${chunk}" "${ln}"
+    if !(( ln % 10 )); then
+      echo "$..INFO ${ln} lignes inserees a partir du chunk ${chunk}"
+    fi
+  done
+}
+
+#
+# Transforme un chunk vers un csv
+#
+primeDB_setup_chunk_toCsv(){
+  chunk="${1:-1}"
+
+  chunk="$( primeDB_CORE_chunk_getPath "${chunk}" )"
+  oneColumn='s/[[:space:]]\+/\n/g'
+  digitFilter='[[:digit:]]'
+  crumb=','
+  csv="$(cat "${chunk}" | sed "${oneColumn}" | grep "${digitFilter}" | grep -v "${crumb}")" 
+  echo "${csv}" >> "${primeDB_IMPORT}"
+}
+
+#
+# Import les nombres premiers dans la base de données
+#
+primeDB_setup_importCsv(){
+  csv="${1:-${primeDB_IMPORT}}"
+  database="${2:-${primeDB_DATABASE}}"
+  scriptImport="${3:-${primeDB_SQL_IMPORT}}"
+
+  csv="$( echo "${csv}" | sed 's/\//\\\//g' )"
+  scriptImport="$( cat "${scriptImport}" | sed "s/file/${csv}/g" )"
+  echo "${scriptImport}" | sqlite3 "${database}"
+}

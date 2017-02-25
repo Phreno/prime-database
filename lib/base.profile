@@ -64,6 +64,9 @@ export primeDB_DATA_EXT="txt"
 export primeDB_DATA_PADDING="%05d"
 # Location de la base de données
 export primeDB_DATABASE="${primeDB_DATA_DIR}/primeDB.db"
+# Fichier d'import de la base de données
+export primeDB_IMPORT="${primeDB_DATA_DIR}/import.csv"
+
 
 #
 # BIN
@@ -84,6 +87,7 @@ export primeDB_ERROR="${primeDB_LIB_DIR}/error.sh"
 export primeDB_SQL_DIR="${primeDB_DIR}/sql"
 export primeDB_SQL_CREATE="${primeDB_SQL_DIR}/db_create.sql"
 export primeDB_SQL_INSERT="${primeDB_SQL_DIR}/db_insert.sql"
+export primeDB_SQL_IMPORT="${primeDB_SQL_DIR}/db_import.sql"
 
 #
 # TEST

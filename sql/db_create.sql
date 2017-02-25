@@ -1,3 +1,2 @@
 CREATE TABLE prime (
-  indice INTEGER PRIMARY KEY,
   value INTEGER);

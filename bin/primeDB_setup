@@ -39,6 +39,9 @@ primeDB_download(){
   echo ">> INFO download done"
 }
 
+#
+# Extrait les fichiers téléchargés
+#
 primeDB_extract(){
   echo ">> INFO extract files"
   primeDB_setup_unzipPrimes
@@ -47,8 +50,31 @@ primeDB_extract(){
   echo ">> INFO extract done"
 }
 
+#
+# Transforme les fichiers téléchargés en fichiers csv
+#
+primeDB_transform(){
+  echo ">> INFO transform data files"
+  rm "${primeDB_IMPORT}" -f
+  for chunk in $( seq 1 1 $( primeDB_CORE_countChunks ) ); do
+    echo ".. INFO add chunk ${chunk} to working data"
+    primeDB_setup_chunk_toCsv "${chunk}"
+  done
+  echo ">> INFO transform done"
+}
+
+#
+# Charge les données dans la base de données locale
+#
+primeDB_load(){
+  echo ">> INFO import csv"
+  primeDB_setup_createDB
+  primeDB_setup_importCsv
+  echo ">> INFO import done"
+}
+
 # primeDB_download
 # primeDB_extract
+# primeDB_transform
+primeDB_load
 # primeDB_setup_backupData
-primeDB_setup_createDB
-primeDB_setup_chunk_loadLine
