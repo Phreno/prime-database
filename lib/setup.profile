@@ -122,6 +122,38 @@ primeDB_setup_removeZipFiles(){
 primeDB_setup_createDB(){
   database="${1:-${primeDB_DATABASE?}}"
   script="${2:-${primeDB_SQL_CREATE?}}"
+
+  rm "${database}"
   cat "${script}" | sqlite3 "${database}"
+}
+
+#
+# Insère la ligne d'un chunk en base de données
+#
+primeDB_setup_chunk_loadLine(){
+  chunk="${1:-1}"
+  lineIndex="${2:-1}"
+  sqlTemplate="${3:-${primeDB_SQL_INSERT}}"
+
+  sqlTemplate="$( cat "${sqlTemplate}" )"
+  line="$( primeDB_CORE_chunk_getLine "${chunk}" "${lineIndex}" )"
+
+  i=1
+  pattern=''
+  for prime in $( echo "${line}"); do
+    if (( ${i} < 9 )); then
+      anchor="@${i}"
+      pattern="s/${anchor}/${prime}/g ; ${pattern}"
+      echo "---------"
+      echo "${anchor}"
+      echo "${line}"
+      echo "${pattern}"
+    fi
+    i=$(( i + 1 ))
+  done
+  sqlTemplate="$( echo "${sqlTemplate}" | sed "${pattern}")"
+  echo ${sqlTemplate}
+  echo ${sqlTemplate} | sqlite3 "${primeDB_DATABASE}"
+  echo "select * from prime;" | sqlite3 "${primeDB_DATABASE}"
 }
 

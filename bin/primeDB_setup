@@ -51,3 +51,4 @@ primeDB_extract(){
 # primeDB_extract
 # primeDB_setup_backupData
 primeDB_setup_createDB
+primeDB_setup_chunk_loadLine
