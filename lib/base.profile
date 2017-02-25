@@ -46,9 +46,9 @@ export primeDB_CHUNK_LINES=125000 # Without cartouche
 export primeDB_CHUNK_COUNT=1000000
 
 
-# =======================
+# ====================
 # DIR & FILE MANAGMENT
-# =======================
+# ====================
 
 #
 # DATA
@@ -62,6 +62,8 @@ export primeDB_DATA_COMPRESSION="zip"
 export primeDB_DATA_EXT="txt"
 # Padding utilisé pour nommer les chunks
 export primeDB_DATA_PADDING="%05d"
+# Location de la base de données
+export primeDB_DATABASE="${primeDB_DATA_DIR}/primeDB.db"
 
 #
 # BIN
@@ -73,8 +75,15 @@ export primeDB_SERVICE="${primeDB_BIN_DIR}/service.sh"
 #
 # LIB
 #
-export primeDB_LIB_DIR="${primeDB_BIN_DIR}/lib"
+export primeDB_LIB_DIR="${primeDB_DIR}/lib"
 export primeDB_ERROR="${primeDB_LIB_DIR}/error.sh"
+
+#
+# SQL
+#
+export primeDB_SQL_DIR="${primeDB_DIR}/sql"
+export primeDB_SQL_CREATE="${primeDB_SQL_DIR}/db_create.sql"
+export primeDB_SQL_INSERT="${primeDB_SQL_DIR}/db_insert.sql"
 
 #
 # TEST

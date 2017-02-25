@@ -8,9 +8,9 @@
 # =====
 #
 # Installe la base de données des nombres premiers.
-# L'installation se passe en 3 étapes:
+# L'installation suit les étapes suivantes:
 # - Téléchargement des zip contenant les nombres premiers
-# - Renomage des fichiers pour pouvoir automatiser les calculs
+# - Extraction des fichiers puis renommage
 # - Sauvegarde du répertoire ( permet le traitement du setup offline )
 
 primeDB_SETUP_SH="${BASH_SOURCE[0]:-$(realpath ${0})}"
@@ -47,8 +47,7 @@ primeDB_extract(){
   echo ">> INFO extract done"
 }
 
-primeDB_download
-primeDB_extract
-primeDB_setup_backupData
-
-
+# primeDB_download
+# primeDB_extract
+# primeDB_setup_backupData
+primeDB_SETUP_SH

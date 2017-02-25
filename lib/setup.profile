@@ -116,4 +116,11 @@ primeDB_setup_removeZipFiles(){
   echo "..INFO removing done"
 }
 
-
+#
+# Crée la base de données
+#
+primeDB_setup_createDB(){
+  database="${1:-${primeDB_DATA_DIR?}}"
+  sqlite3 "${database}"
+  
+}
