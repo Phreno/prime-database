@@ -112,8 +112,8 @@ primeDB_CORE_chunk_countLines(){
 #
 # Liste les chunk disponibles
 #
-primeDB_CORE_listChunksFiles(){
-  ls -1 ${primeDB_DATA_DIR}/*.zip
+primeDB_CORE_listChunksFil(){
+  l -1 ${primeDB_DATA_DIR}/*.zip
 }
 
 #
@@ -152,103 +152,3 @@ primeDB_CORE_chunk_getNth(){
   offsetCursor=$(( ${offset} + 1 ))
   primeDB_CORE_chunk_line_getPrime ${chunk} ${lineCursor} ${offsetCursor}
 }
-
-#
-# Récupère le chunk au sein duquel est contenu le nombre
-#
-primeDB_CORE_getCandidateChunk(){
-  entry=${1:-1}
-  guess=${2:-1}
-  limit=${3:-"$( primeDB_CORE_countChunks )"}
-
-  while [ ${entry} -ge $( primeDB_CORE_chunk_getMinPrime ${guess} ) ]; do
-    guess=$(( $guess + 1 ))
-    if [ "${guess}" -gt "${limit}" ]; then
-      echo "ERR primeDB_CORE_getCandidateChunk: guess growing up"
-      exit 1
-    fi
-  done
-
-  echo "${guess}"
-}
-
-# FIXME: La recherche linéaire est beaucoup trop lente
-# 
-# Récupère la ligne au sein de laquelle est contenu le nombre
-#
-primeDB_CORE_chunk_getCandidateLine_linear(){
-  chunk=${1:-1}
-  entry=${2:-1}
-  guess=${3:-1}
-  limit=${4:-${primeDB_CHUNK_LINES}}
-  first=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${guess} )
-  while [ $(( ${entry} )) -ge $(( ${first} )) ]; do
-    guess=$(( guess + 1 ))
-    first=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${guess} )
-  done
-  echo $(( ${guess} -1 ))
-}
-
-
-# TODO
-# Essai en dichotomique
-#
-
-#1 Indice entier i, l, r
-#2 l = 1
-#3 r = N
-#4 i = b(l + r)/2c
-#5 while ((k 6= T[i]) ∧ (l ≤ r)) do
-#6 if (k < T[i]) then
-#7 r = i − 1
-#8 else
-#9 l = i + 1
-#10 i = b(l + r)/2c
-#11 if (k == T[i]) then
-#12 retourner i
-#13 else
-#14 retourner −1
-
-primeDB_CORE_chunk_getCandidateLine(){
-  chunk=${1:-1}
-  search=${2:-1}
-
-  left=1
-  right=${primeDB_CHUNK_LINES}
-  index= $(( (${left} + ${right}) / 2 ))
-
-}
-
-# TODO
-# Est ce qu'un nombre se situe sur une ligne
-#
-# Est situé sur la ligne, tout nombre
-# dont la valeur est comprise entre la première valeur de la ligne,
-# et la première valeur de la ligne suivante.
-primeDB_CORE_chunk_line_isIncludedIn(){
-  chunk=${1:-1}
-  line=${2:-1}
-  value=${3:-1}
-
-  start=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} ${line} )
-  end=$( primeDB_CORE_chunk_line_getMinPrime ${chunk} $(( ${line} + 1 )) )
-  echo ${start}
-  echo ${end}
-  result=-1
-  if [ $(( ${value} )) -ge $(( ${start} )) ] && [ $(( ${value} )) -lt $(( ${end} )) ]; then
-    result=${value}
-  fi
- ${result}
-}
-
-
-# TODO
-# Est ce qu'un nombre est premier
-#
-primeDB_CORE_isPrime(){
-  value=${1:-1}
-  chunk=$( primeDB_CORE_getCandidateChunk ${value} )
-  line=$( primeDB_CORE_chunk_getCandidateLine ${chunk} ${value} )
-  echo ${line}
-}
-

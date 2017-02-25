@@ -65,8 +65,6 @@ primeDB_setup_unzipPrimes(){
   primesLocation="${1:-${primeDB_DATA_DIR?}}"
   echo ".. INFO extracting primes"
   for file in $( find "${primesLocation}" -name "*.zip" ); do
-    echo "DEBUG file ${file}"
-    echo "DEBUG primesLocation ${primesLocation}"
     unzip "${file}" -d "${primesLocation}";
   done
   echo ".. INFO extraction done"
@@ -101,8 +99,21 @@ primeDB_setup_normalizeDatafileName(){
     indice=${indice#${prefix}}
     indice=${indice%.${format}}
     indice=$( printf ${padding} ${indice} )
-    new="$( dirname $chunk )/${indice}.${format}"
+    new="$( dirname $chunk )/${indice}"
     echo "moving ${chunk} to ${new}"
     mv ${chunk} ${new}
   done
 }
+
+#
+# Supprime les fichiers zip
+#
+primeDB_setup_removeZipFiles(){
+  folder="${1:-${primeDB_DATA_DIR?}}"
+  format="${2:-${primeDB_DATA_COMPRESSION?}}"
+  echo "..INFO removing zip files"
+  rm ${folder}/*.${format} -v
+  echo "..INFO removing done"
+}
+
+

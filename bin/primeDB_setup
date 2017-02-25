@@ -25,20 +25,30 @@ source ${primeDB_SETUP_SH_DIR}/lib/error.profile
 # Import des dépendances
 #
 source ${primeDB_SETUP_SH_DIR}/lib/base.profile
+source ${primeDB_SETUP_SH_DIR}/lib/core.profile
 source ${primeDB_SETUP_SH_DIR}/lib/setup.profile
 
 #
 # Téléchargement des données à installer
 #
-primeDB_downloadDataAndBackup(){
-  echo ".. INFO download primeDB data"
+primeDB_download(){
+  echo ">> INFO download primeDB data"
   primeDB_setup_removeData
   primeDB_setup_downloadPrimes
   primeDB_setup_cleanFolder
-  echo ".. INFO download done"
+  echo ">> INFO download done"
 }
 
-# primeDB_downloadDataAndBackup
-primeDB_setup_unzipPrimes
-primeDB_setup_normalizeDatafileName
-#primeDB_setup_backupData
+primeDB_extract(){
+  echo ">> INFO extract files"
+  primeDB_setup_unzipPrimes
+  primeDB_setup_removeZipFiles
+  primeDB_setup_normalizeDatafileName
+  echo ">> INFO extract done"
+}
+
+primeDB_download
+primeDB_extract
+primeDB_setup_backupData
+
+
