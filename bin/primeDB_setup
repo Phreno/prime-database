@@ -1,15 +1,14 @@
 #!/bin/bash
-# ..............
-# [K3rn€l_P4n1k]
-# ..............
 
-# =====
-# SETUP
-# =====
+# .................................................
+# [K3rn€l_P4n1k] - primeDB_setup - 1.0 - 2017.02.26
+# .................................................
+
+# Description
 #
 # Installe la base de données des nombres premiers.
 # L'installation suit les étapes suivantes:
-
+#
 # - Téléchargement des zip contenant les nombres premiers
 # - Extraction des fichiers
 # - Merge des fichiers
@@ -17,6 +16,7 @@
 
 primeDB_SETUP_SH="${BASH_SOURCE[0]:-$(realpath ${0})}"
 primeDB_SETUP_SH_DIR="$( dirname ${primeDB_SETUP_SH} )"
+empty=""
 
 #
 # Gestion des erreurs
@@ -34,11 +34,12 @@ source "${primeDB_SETUP_SH_DIR}/../lib/setup.profile"
 # Téléchargement des données à installer
 #
 primeDB_download(){
-  echo ">> INFO download primeDB data"
+  echo ">> INFO download primeDB data (could take a while depending on your connection)"
   primeDB_setup_removeData
   primeDB_setup_downloadPrimes
   primeDB_setup_cleanFolder
   echo ">> INFO download done"
+  echo "${empty}"
 }
 
 #
@@ -50,6 +51,7 @@ primeDB_extract(){
   primeDB_setup_removeZipFiles
   primeDB_setup_normalizeDatafileName
   echo ">> INFO extract done"
+  echo "${empty}"
 }
 
 #
@@ -63,16 +65,18 @@ primeDB_transform(){
     primeDB_setup_chunk_toCsv "${chunk}"
   done
   echo ">> INFO transform done"
+  echo "${empty}"
 }
 
 #
 # Charge les données dans la base de données locale
 #
 primeDB_load(){
-  echo ">> INFO import csv"
+  echo ">> INFO import csv (could take a while)"
   primeDB_setup_createDB
   primeDB_setup_importCsv
   echo ">> INFO import done"
+  echo "${empty}"
 }
 
 #
@@ -82,33 +86,28 @@ primeDB_clean(){
   echo ">> INFO remove csv"
   rm -f "${primeDB_IMPORT}"
   echo ">> INFO remove done"
+  echo "${empty}"
 }
 
 #
 # Montre les informations générales
 #
 primeDB_info(){
+  echo "${empty}"
   echo "Copyright (C) 2017 K3rn€l_P4n1K"
   echo "This program comes with ABSOLUTELY NO WARRANTY;"
   echo "This is free software, and you are welcome to redistribute it"
   echo "under certain conditions;"
+  echo "${empty}"
 }
 
+#
+# Indique que le script s'est terminé
+#
 primeDB_end(){
   echo "Installation terminée"
   echo "-----SCRIPT END-----"
 }
-
-#
-# Montre les informations générales
-#
-primeDB_info(){
-  echo "Copyright (C) 2017 K3rn€l_P4n1K"
-  echo "This program comes with ABSOLUTELY NO WARRANTY;"
-  echo "This is free software, and you are welcome to redistribute it"
-  echo "under certain conditions;"
-}
-
 
 # ======================
 # ROUTINE D'INSTALLATION
@@ -128,4 +127,4 @@ primeDB_main(){
 # LANCEMENT DE L'INSTALLATION
 # ===========================
 
-main
+primeDB_main

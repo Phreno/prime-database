@@ -1,7 +1,12 @@
-#!/bin/sh
-# ..............
-# [K3rn€l_P4n1k]
-# ..............
+#!/bin/bash
+
+# ..............................................................
+# [K3rn€l_P4n1k] - primeDB_setup/base.profile - 1.0 - 2017.02.26
+# ..............................................................
+
+# Description
+#
+# Fournit les constantes de base pour l'installation
 
 primeDB_BASE_PROFILE="${BASH_SOURCE[0]:-$(realpath ${0})}"
 primeDB_BASE_PROFILE_DIR="$( dirname ${primeDB_BASE_PROFILE} )"

@@ -1,11 +1,11 @@
 #!/bin/bash
-# ..............
-# [K3rn€l_P4n1k]
-# ..............
+#!/bin/bash
 
-# =============
-# SETUP_PROFILE
-# =============
+# ...............................................................
+# [K3rn€l_P4n1k] - primeDB_setup/setup.profile - 1.0 - 2017.02.26
+# ...............................................................
+
+# Description
 #
 # Fonctions utilitaires pour l'installation de la base de données
 
