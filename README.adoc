@@ -1,9 +1,12 @@
-# primeDB
+# primeDatabase-setup
 
-primeDB est un utilitaire qui permet de travailler sur une base de 50 Millions de nombres premiers.
+primeDatabase-setup installe une banque de données de 50 Millions de nombres premiers.
+
 Le propos de cette applications et d'économiser les temps de calcul en préférant la recherche à la décomposition de facteur.
 
 # Installation
+
+Prévoir 1,5 Giga (estimation large) de libre pour l'installation. Le fichier final fait un peu moins de 700 Méga.
 
 ## Téléchargement de la banque de données
 
@@ -12,30 +15,33 @@ L'installation télécharge les fichiers depuis http://primes.utm.edu/lists/smal
   git clone https://github.com/Phreno/primeDatabase.git
   ./primeDatabase/bin/primeDB_setup
 
-## Backup
+## Dépendances
 
-Étant tributaire de la disponnibilité des fichiers, pendant l'installation une sauvegarde est faite dans ./primeDatabase/.data.tar
+- SQLite3
 
-## Visibilité des fonctionnalités
+TIP: L'installation complète à été testée sous Ubuntu 16.04 avec zsh.
 
-Pour utiliser l'application depuis n'importe où pendant la durée de la session
+## Utilisation
 
-  PATH="${PATH}:$(pwd)/primeDatabase/bin"
+  sqlite3 ./primeDatabase/data/primeDB.db
+  sqlite> select rowid, value from prime where rowid < 100 ;
 
-# Usage
+## Structure
 
-## Liste des fonctionnalités à implémenter
+- `bin` Comprend le script d'installation de la base de données
+- `data` Contient les fichiers temporaires et la base de données finale
+- `lib` Toutes les dépendances du script d'installation
+- `sql` Script de crétion et template d'import de la base de données
+- `test` Tests mannuels sur les opérations effectuées sur les fichiers temporaires
 
-- getNth
-- getAfter
-- getBefore
-- getUntil
-- getBetween
-- isPrime
+### Détail des dépendances internes
 
-# Développement
+- `base.profile` Les constantes
+- `core.profile` Les fonctions
+- `error.profile` Gestion des erreurs (source stackoverflow)
+- `setup.profile` Fonctions d'installation
 
-## Structures
+### Notes complémentaires
 
-## Tests
-
+L'utilisation de SQLite3 s'est faite tardivement dans l'application, si bien que `core.profile` & `setup.profile` contiennent
+quelques fonctions obsolètes, qui étaient destinées pour travailler sur les fichiers plats.

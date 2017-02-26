@@ -176,7 +176,7 @@ primeDB_setup_chunk_toCsv(){
   digitFilter='[[:digit:]]'
   crumb=','
   csv="$(cat "${chunk}" | sed "${oneColumn}" | grep "${digitFilter}" | grep -v "${crumb}")"
-  echo "Merge chunk ${chunk} into import file"
+  echo ".. INFO merge chunk ${chunk} into import file"
   echo "${csv}" >> "${primeDB_IMPORT}"
   rm -f "${chunk}"
 }
