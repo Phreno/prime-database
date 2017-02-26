@@ -2,8 +2,6 @@
 
 primeDatabase-setup installe une banque de données de 50 Millions de nombres premiers.
 
-primeDB installe une banque de données de 50 Millions de nombres premiers.
-
 Le propos de cette applications et d'économiser les temps de calcul en préférant la recherche à la décomposition de facteur.
 
 # Installation
