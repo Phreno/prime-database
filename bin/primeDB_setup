@@ -89,6 +89,18 @@ primeDB_clean(){
 # DE LA BASE DE DONNÉES
 # =====================
 
+#
+# Montre les informations générales
+#
+primeDB_info(){
+  echo "Copyright (C) 2017 K3rn€l_P4n1K"
+  echo "This program comes with ABSOLUTELY NO WARRANTY;"
+  echo "This is free software, and you are welcome to redistribute it"
+  echo "under certain conditions;"
+}
+
+
+primeDB_info
 primeDB_download
 
 primeDB_extract
