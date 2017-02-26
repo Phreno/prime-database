@@ -22,7 +22,7 @@ primeDB_setup_downloadPrimes(){
   format="${3:-${primeDB_DATA_COMPRESSION?}}"
 
   echo ".. INFO download primes archive from ${url} into ${folder}"
-  wget -P ${folder} -r -np -nd -l 1 -A ${format} ${url}
+  wget -P "${folder}" -r -np -nd -l 1 -A "${format}" "${url}"
   echo ".. INFO download done"
 }
 
@@ -169,22 +169,25 @@ primeDB_setup_loadChunk_lineByLine(){
 #
 primeDB_setup_chunk_toCsv(){
   chunk="${1:-1}"
+  merge="${primeDB_IMPORT}"
 
   chunk="$( primeDB_CORE_chunk_getPath "${chunk}" )"
   oneColumn='s/[[:space:]]\+/\n/g'
   digitFilter='[[:digit:]]'
   crumb=','
-  csv="$(cat "${chunk}" | sed "${oneColumn}" | grep "${digitFilter}" | grep -v "${crumb}")" 
+  csv="$(cat "${chunk}" | sed "${oneColumn}" | grep "${digitFilter}" | grep -v "${crumb}")"
+  echo "Merge chunk ${chunk} into import file"
   echo "${csv}" >> "${primeDB_IMPORT}"
+  rm -f "${chunk}"
 }
 
 #
 # Import les nombres premiers dans la base de données
 #
 primeDB_setup_importCsv(){
-  csv="${1:-${primeDB_IMPORT}}"
-  database="${2:-${primeDB_DATABASE}}"
-  scriptImport="${3:-${primeDB_SQL_IMPORT}}"
+  csv="${1:-${primeDB_IMPORT?}}"
+  database="${2:-${primeDB_DATABASE?}}"
+  scriptImport="${3:-${primeDB_SQL_IMPORT?}}"
 
   csv="$( echo "${csv}" | sed 's/\//\\\//g' )"
   scriptImport="$( cat "${scriptImport}" | sed "s/file/${csv}/g" )"
