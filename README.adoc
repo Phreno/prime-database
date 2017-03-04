@@ -1,4 +1,4 @@
-# primeDatabase-setup
+# prime-database
 
 primeDatabase-setup installe une banque de données de 50 Millions de nombres premiers.
 
