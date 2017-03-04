@@ -1,0 +1,30 @@
+{
+  "name": "prime-database",
+  "version": "1.0.0",
+  "description": "Client pour une base de données sqlite3",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Phreno/prime-database.git"
+  },
+  "keywords": [
+    "prime",
+    "sqlite3",
+    "database"
+  ],
+  "author": "K3rn€l_P4n1k",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Phreno/prime-database/issues"
+  },
+  "homepage": "https://github.com/Phreno/prime-database#readme",
+  "dependencies": {
+    "sqlite3": "^3.1.8"
+  }
+}
