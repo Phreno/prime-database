@@ -23,6 +23,8 @@ TIP: L'installation complète à été testée sous Ubuntu 16.04 avec zsh.
 
 ## Utilisation
 
+### Avec SQLite3
+
   sqlite3 ./primeDatabase/data/primeDB.db
   sqlite> select rowid, value from prime where rowid < 100 ;
 

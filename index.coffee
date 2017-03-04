@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 # Développeur ....: K3rn€l_P4n1K
-# Description ....: prime-database-client 1.0
+# Description ....: prime-database-client
 # Date de création: samedi 4 mars 2017, 16:03:20 (UTC+0100)
 # Plateformes ....: Ubuntu
 
@@ -15,11 +15,9 @@
 
 constant=
   # Version courante
-  VERSION: '1.0'
+  VERSION: require('./package.json').version
   # Fichier sqlite qui contient la base de données
   DATABASE_FILE:'./data/primeDB.db'
-  # Requête initiale
-  SELECT_QUERY:'SELECT rowid, value FROM prime '
 
 # --------------------
 # Dépendances externes
@@ -36,7 +34,7 @@ vendor=
 # Gestion des arguments console
 vendor.program
   .version(constant.VERSION)
-  .option('-f, --filter [string]', 'Ajoute une clause where sur la requête initiale (ex: rowid=100 or rowid=200)')
+  .option('-q, --query [string]', 'Requête SQLite de sélection')
   .parse process.argv
 
 # Gestion des variables applicatives
@@ -45,10 +43,6 @@ application=
   database:null
   # Résultat de la requête
   resultset:[]
-  # Requête de sélection
-  query:constant.SELECT_QUERY
-
-application.query+="WHERE #{vendor.program.filter}" if (vendor.program.filter)
 
 # ---------
 # Fonctions
@@ -69,7 +63,7 @@ callback_onItemSelection=(err,row)->
 callback_onDatabaseConnectionClose=(err)->
   console.error(
     'ERR pendant la fermeture de la base de données',
-    err)
+    err) if err
   console.log application.resultset
 
 # Ouverture de la connexion à la base de données
@@ -77,15 +71,15 @@ callback_onDatabaseConnectionOpen=(err)->
   console.error(
     'ERR pendant l\'ouverture de la base de données',
     err) if err
-  database.each(application.query, callback_onItemSelection)
-  database.close
+  #database.each(application.query, callback_onItemSelection)
+  database.each(vendor.program.query, callback_onItemSelection)
+  database.close callback_onDatabaseConnectionClose
 
 # -----------------------
 # Lancement de la routine
 # -----------------------
 
 database=new vendor.sqlite.Database(
-  #constant.DATABASE_FILE,
-  '/home/etienne/workspace/primeWorkspace/prime-database/data/primeDB.db',
+  constant.DATABASE_FILE,
   vendor.sqlite.OPEN_READONLY,
   callback_onDatabaseConnectionOpen)
