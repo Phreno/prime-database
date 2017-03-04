@@ -1,19 +1,19 @@
 # prime-database
 
-primeDatabase-setup installe une banque de données de 50 Millions de nombres premiers.
+prime-database installe une banque de données de 50 Millions de nombres premiers.
 
 Le propos de cette applications et d'économiser les temps de calcul en préférant la recherche à la décomposition de facteur.
 
-# Installation
+# Installation de la base de données
 
 Prévoir 1,5 Giga (estimation large) de libre pour l'installation. Le fichier final fait un peu moins de 700 Méga.
 
 ## Téléchargement de la banque de données
 
-L'installation télécharge les fichiers depuis http://primes.utm.edu/lists/small/millions dans le dossier ./primeDatabase/data
+L'installation télécharge les fichiers depuis http://primes.utm.edu/lists/small/millions dans le dossier ./prime-database/database/data
 
-  git clone https://github.com/Phreno/primeDatabase.git
-  ./primeDatabase/bin/primeDB_setup
+  git clone https://github.com/Phreno/prime-database/database.git
+  ./prime-database/database/bin/primeDB_setup
 
 ## Dépendances
 
@@ -25,10 +25,10 @@ TIP: L'installation complète à été testée sous Ubuntu 16.04 avec zsh.
 
 ### Avec SQLite3
 
-  sqlite3 ./primeDatabase/data/primeDB.db
+  sqlite3 ./prime-database/database/data/primeDB.db
   sqlite> select rowid, value from prime where rowid < 100 ;
 
-## Structure
+## Structure du dossier `database`
 
 - `bin` Comprend le script d'installation de la base de données
 - `data` Contient les fichiers temporaires et la base de données finale

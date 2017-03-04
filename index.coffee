@@ -17,7 +17,7 @@ constant=
   # Version courante
   VERSION: require('./package.json').version
   # Fichier sqlite qui contient la base de données
-  DATABASE_FILE:'./data/primeDB.db'
+  DATABASE_FILE:'./database/data/primeDB.db'
 
 # --------------------
 # Dépendances externes
