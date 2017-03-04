@@ -10,9 +10,9 @@ Prévoir 1,5 Giga (estimation large) de libre pour l'installation. Le fichier fi
 
 ## Téléchargement de la banque de données
 
-L'installation télécharge les fichiers depuis http://primes.utm.edu/lists/small/millions dans le dossier ./prime-database/database/data
+L'installation télécharge les fichiers depuis http://primes.utm.edu/lists/small/millions dans le dossier `./prime-database/database/data`
 
-  git clone https://github.com/Phreno/prime-database/database.git
+  git clone https://github.com/Phreno/prime-database.git
   ./prime-database/database/bin/primeDB_setup
 
 ## Dépendances
