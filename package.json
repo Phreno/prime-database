@@ -26,5 +26,8 @@
   "homepage": "https://github.com/Phreno/prime-database#readme",
   "dependencies": {
     "sqlite3": "^3.1.8"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
   }
 }
