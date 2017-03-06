@@ -1,3 +1,2 @@
-.data.tar
-data
 node_modules
+database/data/primeDB.db
