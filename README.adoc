@@ -47,3 +47,25 @@ TIP: L'installation complète à été testée sous Ubuntu 16.04 avec zsh.
 
 L'utilisation de SQLite3 s'est faite tardivement dans l'application, si bien que `core.profile` & `setup.profile` contiennent
 quelques fonctions obsolètes, qui étaient destinées pour travailler sur les fichiers plats.
+
+# Import de la librairie
+
+En Javascript
+
+  ./prime-database/public/service/PrimeDatabaseService.js
+
+En CoffeeScript
+
+  ./prime-database/src/service/PrimeDatabaseService.coffee
+
+# Utilisation du client
+
+En Javascript
+
+  ./prime-database/public/client/index.js
+
+En CoffeeScript
+
+  ./prime-database/src/client/index.coffee
+
+
