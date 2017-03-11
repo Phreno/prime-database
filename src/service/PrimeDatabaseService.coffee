@@ -3,23 +3,29 @@
 # --------------------
 VENDOR=
   winston:require 'winston'
-  sqlite:require('sqlite3').verbose()
-
-do configureWinston=->
-  log="PrimeDatabaseService.log"
-  VENDOR.winston.add(VENDOR.winston.transports.File, { filename: log })
-  VENDOR.winston.remove(VENDOR.winston.transports.Console)
-  VENDOR.winston.level='debug'
-
-VENDOR.winston.debug "Chargement du fichier #{__filename}"
+  sqlite:require 'sqlite3'
 
 # ------------------------
 # Configuration du service
 # ------------------------
 
+# Les logs sont dans le dossier log
+logFile=__filename.replace(/src\/service/, 'log')
+# Les logs ont l'extension .log
+logFile=logFile.replace(/\.coffee/, '.log')
+
 CONFIGURATION=
-  database: "#{__dirname}/../database/data/primeDB.db"
+  database: __dirname.replace /src.*$/, "database/data/primeDB.db"
   mode:VENDOR.sqlite.OPEN_READONLY
+  logFile:
+    filename: logFile
+
+do configureWinston=->
+  VENDOR.winston.add(VENDOR.winston.transports.File, CONFIGURATION.logFile)
+  VENDOR.winston.remove(VENDOR.winston.transports.Console)
+  VENDOR.winston.level='debug'
+
+VENDOR.winston.debug "Chargement du fichier #{__filename}"
 
 # ---------------------------
 # Liste des requêtes exposées

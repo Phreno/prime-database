@@ -1,7 +1,7 @@
 chai=require 'chai'
 expect=chai.expect
-PrimeDatabaseService=require '../src/PrimeDatabaseService.coffee'
 
+PrimeDatabaseService=require __filename.replace '/test', '/src/service'
 constant=
   DATABASE:'../database/data/primeDB.db'
 
