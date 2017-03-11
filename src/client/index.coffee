@@ -13,9 +13,11 @@
 # Constantes
 # ----------
 
+bundle="/package.json"
+extra=/\/[a-zA-Z]+\/client$/
 CONSTANT=
   # Version courante
-  version: require('./package.json').version
+  version: require(__dirname.replace extra, bundle).version
 
 # --------------------
 # Dépendances externes
@@ -24,8 +26,10 @@ CONSTANT=
 VENDOR=
   program:require 'commander'
 
-LIB=
-  primeDB:require './src/PrimeDatabaseService.js'
+ext=__filename.match /\.[a-zA-Z]+$/
+service=__dirname.replace /client.*$/, "service/PrimeDatabaseService#{ext}"
+LIB={primeDB:require service}
+
 # --------------
 # Initialisation
 # --------------
@@ -33,9 +37,14 @@ LIB=
 # Gestion des arguments console
 VENDOR.program
   .version(CONSTANT.version)
-  .option('-n, --nth [indice]', 'Donne la valeur du nombre premier à l\'indice n', 1)
-  .parse process.argv
+  .option(
+    '-n, --nth [number]'
+    , 'Donne la valeur du nombre premier à l\'indice n'
+    , 1).parse process.argv
 
 if VENDOR.program.nth
-  LIB.primeDB.getNth VENDOR.program.nth
-
+  print=(row)->
+    console.log row.value
+  new LIB
+    .primeDB()
+    .getNth(parseInt(VENDOR.program.nth), print)

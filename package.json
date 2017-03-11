@@ -2,7 +2,7 @@
   "name": "prime-database",
   "version": "1.0.0",
   "description": "Client pour une base de données sqlite3",
-  "main": "index.js",
+  "main": "public/service/PrimeDatabaseService.js",
   "directories": {
     "test": "test"
   },

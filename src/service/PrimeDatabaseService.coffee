@@ -10,12 +10,12 @@ VENDOR=
 # ------------------------
 
 # Les logs sont dans le dossier log
-logFile=__filename.replace(/src\/service/, 'log')
+logFile=__filename.replace(/\w+\/service/, '/log')
 # Les logs ont l'extension .log
-logFile=logFile.replace(/\.coffee/, '.log')
+logFile=logFile.replace(/\.\w+$/, '.log')
 
 CONFIGURATION=
-  database: __dirname.replace /src.*$/, "database/data/primeDB.db"
+  database: __dirname.replace /\w+\/\w+$/, "database/data/primeDB.db"
   mode:VENDOR.sqlite.OPEN_READONLY
   logFile:
     filename: logFile
