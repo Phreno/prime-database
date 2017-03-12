@@ -47,4 +47,20 @@ describe 'PrimeDatabaseService',->
           expect(row.value).to.equal 3
         primeDB.getNth 2, testCallback
 
+  describe 'isPrime(number)',->
+
+    describe 'check errors',->
+
+      it 'should throw ReferenceError if no input', ->
+        expect(primeDB.isPrime.bind(primeDB)).to.throw(ReferenceError)
+        expect(primeDB.isPrime.bind(primeDB, "dummy"))
+          .to.not.throw(ReferenceError)
+
+      it 'should throw TypeError if input != number', ->
+        expect(primeDB.isPrime.bind(primeDB, "I'm a string"))
+          .to.throw(TypeError)
+        expect(primeDB.isPrime.bind(primeDB, 1))
+          .to.not.throw(TypeError)
+
+
 

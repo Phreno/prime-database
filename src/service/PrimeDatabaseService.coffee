@@ -32,28 +32,66 @@ VENDOR.winston.debug "Chargement du fichier #{__filename}"
 # ---------------------------
 
 QUERY=
-  getNth:"SELECT rowid, value FROM prime WHERE rowid=?"
+
+  getNth:"""
+  SELECT  rowid, value
+  FROM    prime
+  WHERE   rowid=?;
+  """
+
+  isPrime:"""
+  SELECT  rowid, value
+  FROM    prime
+  WHERE   value=?
+  """
+
+# -------------------
+# Gestion des Erreurs
+# -------------------
+
+class ErrorManager
+  constructor:->
+    VENDOR.winston.debug """
+    ErrorManager()
+    """
+
+  checkNonNull:(variable, message='ne peut pas etre null')->
+    if !variable?
+      err=new ReferenceError message
+      VENDOR.winston.error err
+      throw err
+      process.exit 1
+
+  checkNumber:(variable, message='doit être un nombre')->
+    if typeof variable isnt "number"
+      err=new TypeError message
+      VENDOR.winston.error err
+      throw err
+      process.exit 1
+
+  checkError:(error)->
+    if error
+      VENDOR.winston.error error
+      throw error
+      process.exit 1
+
+# --------------------
+# Dépenpances internes
+# --------------------
+LIB =
+  query:QUERY
+  errorManager:new ErrorManager()
 
 class PrimeDatabaseService
   constructor:->
     VENDOR.winston.debug """
-    PrimeDatabaseService(#{JSON.stringify @configuration, null, 2})
+    PrimeDatabaseService()
     """
 
   getNth:(indice, callback=console.log)->
     VENDOR.winston.debug "getNth(#{indice})"
-
-    if !indice?
-      err=new ReferenceError "indice ne peut pas être null"
-      VENDOR.winston.error err
-      throw err
-      process.exit 1
-
-    if typeof indice isnt "number"
-      err=new TypeError "indice doit être un nombre"
-      VENDOR.winston.error err
-      throw err
-      process.exit 1
+    LIB.errorManager.checkNonNull indice
+    LIB.errorManager.checkNumber indice
 
     # Récupération du résultat
     onItemSelection=(err,row)->
@@ -62,12 +100,7 @@ class PrimeDatabaseService
       #{JSON.stringify err, null, 2},
       #{JSON.stringify row, null, 2})
       """
-
-      if err
-        VENDOR.winston.error err
-        throw err
-        process.exit 1
-
+      LIB.errorManager.checkError err
       callback row
 
     # Fermeture de la connexion à la base de données
@@ -75,29 +108,21 @@ class PrimeDatabaseService
       VENDOR.winston.debug """
       onDatabaseConnectionClose(#{JSON.stringify err, null, 2})
       """
-
-      if err
-        VENDOR.winston.error err
-        throw err
-        process.exit 1
+      LIB.errorManager.checkError err
 
     # Ouverture de la connexion à la base de données
     onDatabaseConnectionOpen=(err)->
       VENDOR.winston.debug """
       onDatabaseConnectionOpen(#{JSON.stringify err, null, 2})
       """
-
-      if err
-        VENDOR.winston.error err
-        throw err
-        process.exit 1
+      LIB.errorManager.checkError err
 
     new VENDOR.sqlite.Database(
       CONFIGURATION.database,
       CONFIGURATION.mode,
       onDatabaseConnectionOpen
     ).get(
-      QUERY.getNth
+      LIB.query.getNth
       ,indice
       ,onItemSelection).close onDatabaseConnectionClose
 
