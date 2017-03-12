@@ -27,103 +27,67 @@ do configureWinston=->
 
 VENDOR.winston.debug "Chargement du fichier #{__filename}"
 
-# ---------------------------
-# Liste des requêtes exposées
-# ---------------------------
-
-#QUERY=
-#
-#  getNth:"""
-#  SELECT  rowid, value
-#  FROM    prime
-#  WHERE   rowid=?;
-#  """
-#
-#  isPrime:"""
-#  SELECT  rowid, value
-#  FROM    prime
-#  WHERE   value=?
-#  """
-#
-## -------------------
-## Gestion des Erreurs
-## -------------------
-#
-#class ErrorManager
-#  constructor:->
-#    VENDOR.winston.debug """
-#    ErrorManager()
-#    """
-#
-#  checkNonNull:(variable, message='ne peut pas etre null')->
-#    if !variable?
-#      err=new ReferenceError message
-#      VENDOR.winston.error err
-#      throw err
-#      process.exit 1
-#
-#  checkNumber:(variable, message='doit être un nombre')->
-#    if typeof variable isnt "number"
-#      err=new TypeError message
-#      VENDOR.winston.error err
-#      throw err
-#      process.exit 1
-#
-#  checkError:(error)->
-#    if error
-#      VENDOR.winston.error error
-#      throw error
-#      process.exit 1
-#
 # --------------------
 # Dépenpances internes
 # --------------------
+#class CallbackManager
+#  constructor:(@callback=console.log)->
+#    VENDOR.winston.debug """
+#    CallbackManager
+#    """
+#
+#  # Récupération du résultat
+#  onItemSelection:(err,row)->
+#    VENDOR.winston.debug """
+#    onItemSelection(
+#    #{JSON.stringify err, null, 2},
+#    #{JSON.stringify row, null, 2})
+#    """
+#    LIB.errorManager.checkError err
+#    @callback row
+#
+#  # Fermeture de la connexion à la base de données
+#  onDatabaseConnectionClose:(err)->
+#    VENDOR.winston.debug """
+#    onDatabaseConnectionClose(#{JSON.stringify err, null, 2})
+#    """
+#    LIB.errorManager.checkError err
+#
+#  # Ouverture de la connexion à la base de données
+#  onDatabaseConnectionOpen:(err)->
+#    VENDOR.winston.debug """
+#    onDatabaseConnectionOpen(#{JSON.stringify err, null, 2})
+#    """
+#    LIB.errorManager.checkError err
+#
 LIB =
   query:require './query.coffee'
   errorManager:new (require './ErrorManager')()
+  CallbackManager:require './CallbackManager'
 
 class PrimeDatabaseService
   constructor:->
     VENDOR.winston.debug """
     PrimeDatabaseService()
     """
+    @_callbackManager=undefined
 
-  getNth:(indice, callback=console.log)->
+  getNth:(indice, callback)->
     VENDOR.winston.debug "getNth(#{indice})"
+
     LIB.errorManager.checkNonNull indice
     LIB.errorManager.checkNumber indice
 
-    # Récupération du résultat
-    onItemSelection=(err,row)->
-      VENDOR.winston.debug """
-      onItemSelection(
-      #{JSON.stringify err, null, 2},
-      #{JSON.stringify row, null, 2})
-      """
-      LIB.errorManager.checkError err
-      callback row
-
-    # Fermeture de la connexion à la base de données
-    onDatabaseConnectionClose=(err)->
-      VENDOR.winston.debug """
-      onDatabaseConnectionClose(#{JSON.stringify err, null, 2})
-      """
-      LIB.errorManager.checkError err
-
-    # Ouverture de la connexion à la base de données
-    onDatabaseConnectionOpen=(err)->
-      VENDOR.winston.debug """
-      onDatabaseConnectionOpen(#{JSON.stringify err, null, 2})
-      """
-      LIB.errorManager.checkError err
+    @_callbackManager=new LIB.CallbackManager callback
 
     new VENDOR.sqlite.Database(
       CONFIGURATION.database,
       CONFIGURATION.mode,
-      onDatabaseConnectionOpen
-    ).get(
-      LIB.query.getNth
-      ,indice
-      ,onItemSelection).close onDatabaseConnectionClose
+      @_callbackManager.onDatabaseConnectionOpen)
+        .get(
+          LIB.query.getNth,
+          indice,
+          @_callbackManager.onItemSelection)
+        .close @_callbackManager.onDatabaseConnectionClose
 
 module.exports=PrimeDatabaseService
