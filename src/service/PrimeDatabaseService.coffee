@@ -31,56 +31,56 @@ VENDOR.winston.debug "Chargement du fichier #{__filename}"
 # Liste des requêtes exposées
 # ---------------------------
 
-QUERY=
-
-  getNth:"""
-  SELECT  rowid, value
-  FROM    prime
-  WHERE   rowid=?;
-  """
-
-  isPrime:"""
-  SELECT  rowid, value
-  FROM    prime
-  WHERE   value=?
-  """
-
-# -------------------
-# Gestion des Erreurs
-# -------------------
-
-class ErrorManager
-  constructor:->
-    VENDOR.winston.debug """
-    ErrorManager()
-    """
-
-  checkNonNull:(variable, message='ne peut pas etre null')->
-    if !variable?
-      err=new ReferenceError message
-      VENDOR.winston.error err
-      throw err
-      process.exit 1
-
-  checkNumber:(variable, message='doit être un nombre')->
-    if typeof variable isnt "number"
-      err=new TypeError message
-      VENDOR.winston.error err
-      throw err
-      process.exit 1
-
-  checkError:(error)->
-    if error
-      VENDOR.winston.error error
-      throw error
-      process.exit 1
-
+#QUERY=
+#
+#  getNth:"""
+#  SELECT  rowid, value
+#  FROM    prime
+#  WHERE   rowid=?;
+#  """
+#
+#  isPrime:"""
+#  SELECT  rowid, value
+#  FROM    prime
+#  WHERE   value=?
+#  """
+#
+## -------------------
+## Gestion des Erreurs
+## -------------------
+#
+#class ErrorManager
+#  constructor:->
+#    VENDOR.winston.debug """
+#    ErrorManager()
+#    """
+#
+#  checkNonNull:(variable, message='ne peut pas etre null')->
+#    if !variable?
+#      err=new ReferenceError message
+#      VENDOR.winston.error err
+#      throw err
+#      process.exit 1
+#
+#  checkNumber:(variable, message='doit être un nombre')->
+#    if typeof variable isnt "number"
+#      err=new TypeError message
+#      VENDOR.winston.error err
+#      throw err
+#      process.exit 1
+#
+#  checkError:(error)->
+#    if error
+#      VENDOR.winston.error error
+#      throw error
+#      process.exit 1
+#
 # --------------------
 # Dépenpances internes
 # --------------------
 LIB =
-  query:QUERY
-  errorManager:new ErrorManager()
+  query:require './query.coffee'
+  errorManager:new (require './ErrorManager')()
 
 class PrimeDatabaseService
   constructor:->
