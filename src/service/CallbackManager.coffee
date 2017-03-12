@@ -1,6 +1,4 @@
 # Développeur ....: K3rn€l_P4n1K
-LIB=
-  errorManager:new (require './ErrorManager')()
 # Description ....: CallbackManager - 1.0 - Sun Mar 12 11:45:08 CET 2017
 # Plateformes ....: Ubuntu
 
@@ -22,8 +20,15 @@ VENDOR=
 LIB=
   errorManager:new (require './ErrorManager')()
 
+# FIXME: Trouver comment faire passer le callback
+# en propriété de la classe.
+
+# Expose de façon affreuse le callback aux autres fonctions.
+doStuff=undefined
+
 class CallbackManager
-  constructor:(@callback=console.log)->
+  constructor:(callback)->
+    doStuff=callback
     VENDOR.winston.debug """
     CallbackManager
     """
@@ -36,7 +41,7 @@ class CallbackManager
     #{JSON.stringify row, null, 2})
     """
     LIB.errorManager.checkError err
-    @callback row
+    doStuff row
 
   # Fermeture de la connexion à la base de données
   onDatabaseConnectionClose:(err)->

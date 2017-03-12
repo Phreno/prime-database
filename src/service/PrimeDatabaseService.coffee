@@ -28,43 +28,16 @@ do configureWinston=->
 VENDOR.winston.debug "Chargement du fichier #{__filename}"
 
 # --------------------
-# Dépenpances internes
+# Dépendances internes
 # --------------------
-#class CallbackManager
-#  constructor:(@callback=console.log)->
-#    VENDOR.winston.debug """
-#    CallbackManager
-#    """
-#
-#  # Récupération du résultat
-#  onItemSelection:(err,row)->
-#    VENDOR.winston.debug """
-#    onItemSelection(
-#    #{JSON.stringify err, null, 2},
-#    #{JSON.stringify row, null, 2})
-#    """
-#    LIB.errorManager.checkError err
-#    @callback row
-#
-#  # Fermeture de la connexion à la base de données
-#  onDatabaseConnectionClose:(err)->
-#    VENDOR.winston.debug """
-#    onDatabaseConnectionClose(#{JSON.stringify err, null, 2})
-#    """
-#    LIB.errorManager.checkError err
-#
-#  # Ouverture de la connexion à la base de données
-#  onDatabaseConnectionOpen:(err)->
-#    VENDOR.winston.debug """
-#    onDatabaseConnectionOpen(#{JSON.stringify err, null, 2})
-#    """
-#    LIB.errorManager.checkError err
-#
 LIB =
-  query:require './query.coffee'
+  query:require './query'
   errorManager:new (require './ErrorManager')()
   CallbackManager:require './CallbackManager'
 
+# =======================================
+# Service de requêtage de nombre premiers
+# =======================================
 class PrimeDatabaseService
   constructor:->
     VENDOR.winston.debug """
@@ -72,11 +45,16 @@ class PrimeDatabaseService
     """
     @_callbackManager=undefined
 
+  #
+  # Récupère le nième nombre premier
+  #
   getNth:(indice, callback)->
     VENDOR.winston.debug "getNth(#{indice})"
 
     LIB.errorManager.checkNonNull indice
     LIB.errorManager.checkNumber indice
+    LIB.errorManager.checkNonNull callback
+    LIB.errorManager.checkFunction callback
 
     @_callbackManager=new LIB.CallbackManager callback
 

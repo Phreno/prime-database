@@ -8,18 +8,30 @@ constant=
 describe 'PrimeDatabaseService',->
   primeDB=new PrimeDatabaseService constant.DATABASE
 
-  describe 'getNth(index)',->
+  describe 'getNth(index, callback)',->
 
     describe 'check errors',->
 
       it 'should throw ReferenceError if no input', ->
         expect(primeDB.getNth.bind(primeDB)).to.throw(ReferenceError)
-        expect(primeDB.getNth.bind(primeDB, "dummy"))
+        expect(primeDB.getNth.bind(primeDB, 'dummy'))
           .to.not.throw(ReferenceError)
 
       it 'should throw TypeError if input != number', ->
-        expect(primeDB.getNth.bind(primeDB, "I'm a string")).to.throw(TypeError)
+        expect(primeDB.getNth.bind(primeDB, 'I\'m a string'))
+          .to.throw(TypeError)
         expect(primeDB.getNth.bind(primeDB, 1))
+          .to.not.throw(TypeError)
+
+      it 'should throw ReferenceError if no callback',->
+        expect(primeDB.getNth.bind(primeDB,42)).to.throw(ReferenceError)
+        expect(primeDB.getNth.bind(primeDB,42,'dummy'))
+          .to.not.throw ReferenceError
+
+      it 'should throw TypeError if callback != func',->
+        expect(primeDB.getNth.bind(primeDB,42,'I\'m a string'))
+          .to.throw(TypeError)
+        expect(primeDB.getNth.bind(primeDB,42,console.log))
           .to.not.throw(TypeError)
 
     describe 'nominal case',->

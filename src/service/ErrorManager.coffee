@@ -36,6 +36,13 @@ class ErrorManager
       throw err
       process.exit 1
 
+  checkFunction:(variable, message='doit être une fonction')->
+    if typeof variable isnt "function"
+      err=new TypeError message
+      VENDOR.winston.error err
+      throw err
+      process.exit 1
+
   checkError:(error)->
     if error
       VENDOR.winston.error error
