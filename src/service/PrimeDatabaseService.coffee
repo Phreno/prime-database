@@ -57,7 +57,7 @@ class PrimeDatabaseService
     LIB.errorManager.checkFunction callback
 
     @_callbackManager=new LIB.CallbackManager callback
-
+    #TODO:Faire une database Factory
     new VENDOR.sqlite.Database(
       CONFIGURATION.database,
       CONFIGURATION.mode,
@@ -67,5 +67,31 @@ class PrimeDatabaseService
           indice,
           @_callbackManager.onItemSelection)
         .close @_callbackManager.onDatabaseConnectionClose
+
+  #
+  # Est-ce qu'un nombre est premier
+  #
+  isPrime:(value, callback)->
+    VENDOR.winston.debug "isPrime(#{value})"
+
+    LIB.errorManager.checkNonNull value
+    LIB.errorManager.checkNumber value
+    LIB.errorManager.checkNonNull callback
+    LIB.errorManager.checkFunction callback
+
+    @_callbackManager=new LIB.CallbackManager callback
+
+    new VENDOR.sqlite.Database(
+      CONFIGURATION.database,
+      CONFIGURATION.mode,
+      @_callbackManager.onDatabaseConnectionOpen)
+        .get(
+          LIB.query.isPrime,
+          indice,
+          @_callbackManager.onItemSelection)
+        .close @_callbackManager.onDatabaseConnectionClose
+
+
+
 
 module.exports=PrimeDatabaseService
