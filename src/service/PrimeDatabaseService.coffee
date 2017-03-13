@@ -87,7 +87,7 @@ class PrimeDatabaseService
       @_callbackManager.onDatabaseConnectionOpen)
         .get(
           LIB.query.isPrime,
-          indice,
+          value,
           @_callbackManager.onItemSelection)
         .close @_callbackManager.onDatabaseConnectionClose
 
