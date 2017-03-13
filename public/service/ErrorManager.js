@@ -35,6 +35,19 @@ ErrorManager = (function() {
     }
   };
 
+  ErrorManager.prototype.checkFunction = function(variable, message) {
+    var err;
+    if (message == null) {
+      message = 'doit être une fonction';
+    }
+    if (typeof variable !== "function") {
+      err = new TypeError(message);
+      VENDOR.winston.error(err);
+      throw err;
+      return process.exit(1);
+    }
+  };
+
   ErrorManager.prototype.checkError = function(error) {
     if (error) {
       VENDOR.winston.error(error);

@@ -35,6 +35,11 @@ describe 'PrimeDatabaseService',->
         expect(primeDB.getNth.bind(primeDB,42,(()->)))
           .to.not.throw(TypeError)
 
+      it 'when indice > max(rowid), then thow Error',->
+        console.log 'not implemented'
+        expect(true).to.equal false
+
+
     describe 'nominal case',->
 
       it 'should work with an object when indice is provided',->
@@ -91,6 +96,11 @@ describe 'PrimeDatabaseService',->
         expect(primeDB.isPrime.bind(primeDB,42,(()->)))
           .to.not.throw(TypeError)
 
+      it 'when value > max(value), then thow Error',->
+        console.log 'not implemented'
+        expect(true).to.equal false
+
+
     describe 'nominal case',->
 
       it 'should work with an object when indice is provided',->
@@ -116,9 +126,9 @@ describe 'PrimeDatabaseService',->
           expect(row.rowid).to.equal 1
         primeDB.isPrime 2, testCallback
 
-      it 'when indice=-1, then value=null',->
+      it 'when input=-1, then rowid=null',->
         testCallback=(row)->
-          expect(row.value).to.equal null
+          expect(row.rowid).to.equal null
         primeDB.isPrime -1, testCallback
 
 
