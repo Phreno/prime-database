@@ -28,7 +28,13 @@ VENDOR=
 
 ext=__filename.match /\.[a-zA-Z]+$/
 service=__dirname.replace /client.*$/, "service/PrimeDatabaseService#{ext}"
-LIB={primeDB:require service}
+
+exit=->
+  process.exit 0
+
+LIB=
+  primeDB:require service
+  exit:exit
 
 # --------------
 # Initialisation
@@ -44,31 +50,38 @@ VENDOR.program
     '-p, --isPrime [number]'
     , 'Détermine si le p est un nombre premier')
   .option(
-    '-P, --position'
+    '-i, --index [number]'
     , 'Renvoie la position de P dans le set des nombres premiers')
   .parse process.argv
 
 if VENDOR.program.nth
-  print=(row)-> console.log row.value
+  print=(row)->
+    console.log row.value
+    LIB.exit()
+
   new LIB
     .primeDB()
     .getNth parseInt(VENDOR.program.nth), print
-  process.exit 1
 
 if VENDOR.program.isPrime
   print=(row)->
-    if row.rowId?
+    if row.rowid isnt null
       console.log 'true'
     else console.log 'false'
+    LIB.exit()
+
   new LIB
     .primeDB()
     .isPrime parseInt(VENDOR.program.isPrime), print
-  process.exit 1
 
-if VENDOR.program.position
-  print=(row)-> console.log row.rowid
+if VENDOR.program.index
+  print=(row)->
+    if row.rowid isnt null
+      console.log row.rowid
+    else console.log 'false'
+    LIB.exit()
+
   new LIB
     .primeDB()
-    .isPrime parseInt(VENDOR.program), print
-  process.exit 1
+    .isPrime parseInt(VENDOR.program.index), print
 

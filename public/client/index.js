@@ -27,25 +27,27 @@ if (VENDOR.program.nth) {
     return console.log(row.value);
   };
   new LIB.primeDB().getNth(parseInt(VENDOR.program.nth), print);
-  process.exit(1);
 }
 
 if (VENDOR.program.isPrime) {
   print = function(row) {
-    if (row.rowId != null) {
-      return console.log('true');
+    if (typeof row.rowid === "function" ? row.rowid(console.log('true')) : void 0) {
+
     } else {
       return console.log('false');
     }
   };
   new LIB.primeDB().isPrime(parseInt(VENDOR.program.isPrime), print);
-  process.exit(1);
 }
 
 if (VENDOR.program.position) {
   print = function(row) {
-    return console.log(row.rowid);
+    if (typeof row.rowid === "function" ? row.rowid(console.log(row.rowid)) : void 0) {
+
+    } else {
+      return console.log('false');
+    }
   };
-  new LIB.primeDB().isPrime(parseInt(VENDOR.program), print);
-  process.exit(1);
 }
+
+new LIB.primeDB().isPrime(parseInt(VENDOR.program), print);

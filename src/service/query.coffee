@@ -16,6 +16,5 @@ module.exports=
   isPrime:"""
   SELECT  rowid, value
   FROM    prime
-  WHERE   value=?
+  WHERE   value=?;
   """
-

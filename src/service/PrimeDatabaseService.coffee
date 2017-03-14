@@ -25,8 +25,6 @@ do configureWinston=->
   VENDOR.winston.remove(VENDOR.winston.transports.Console)
   VENDOR.winston.level='debug'
 
-VENDOR.winston.debug "Chargement du fichier #{__filename}"
-
 # --------------------
 # Dépendances internes
 # --------------------
@@ -90,8 +88,5 @@ class PrimeDatabaseService
           value,
           @_callbackManager.onItemSelection)
         .close @_callbackManager.onDatabaseConnectionClose
-
-
-
 
 module.exports=PrimeDatabaseService

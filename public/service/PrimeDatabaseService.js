@@ -23,8 +23,6 @@ CONFIGURATION = {
   return VENDOR.winston.level = 'debug';
 })();
 
-VENDOR.winston.debug("Chargement du fichier " + __filename);
-
 LIB = {
   query: require('./query'),
   errorManager: new (require('./ErrorManager'))(),

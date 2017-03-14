@@ -41,6 +41,13 @@ class CallbackManager
     #{JSON.stringify row, null, 2})
     """
     LIB.errorManager.checkError err
+
+    # Force la récupération d'un résultat
+    if row is null or row is undefined
+     row=
+      rowid:null
+      value:null
+
     doStuff row
 
   # Fermeture de la connexion à la base de données
