@@ -84,38 +84,38 @@ describe 'PrimeDatabaseService',->
 # IS_PRIME
 # --------
 
-  describe 'isPrime(number, callback)',->
+  describe 'getPosition(number, callback)',->
 
     describe 'check errors',->
 
       it 'should throw ReferenceError if no number', ->
-        expect(primeDB.isPrime.bind(primeDB)).to.throw(ReferenceError)
+        expect(primeDB.getPosition.bind(primeDB)).to.throw(ReferenceError)
 
       it 'should not throw ReferenceError if number',->
-        expect(primeDB.isPrime.bind(primeDB, "dummy"))
+        expect(primeDB.getPosition.bind(primeDB, "dummy"))
           .to.not.throw(ReferenceError)
 
       it 'should throw TypeError if typeof number != number', ->
-        expect(primeDB.isPrime.bind(primeDB, "I'm a string"))
+        expect(primeDB.getPosition.bind(primeDB, "I'm a string"))
           .to.throw(TypeError)
 
       it 'should not throw TypeError if typeof number=number',->
-        expect(primeDB.isPrime.bind(primeDB, 1))
+        expect(primeDB.getPosition.bind(primeDB, 1))
           .to.not.throw(TypeError)
 
       it 'should throw ReferenceError if no callback',->
-        expect(primeDB.isPrime.bind(primeDB,42)).to.throw(ReferenceError)
+        expect(primeDB.getPosition.bind(primeDB,42)).to.throw(ReferenceError)
 
       it 'should not throw ReferenceError if callback',->
-        expect(primeDB.isPrime.bind(primeDB,42,'dummy'))
+        expect(primeDB.getPosition.bind(primeDB,42,'dummy'))
           .to.not.throw ReferenceError
 
       it 'should throw TypeError if callback != func',->
-        expect(primeDB.isPrime.bind(primeDB,42,'I\'m a string'))
+        expect(primeDB.getPosition.bind(primeDB,42,'I\'m a string'))
           .to.throw(TypeError)
 
       it 'should not throw TypeError if typeof callback function',->
-        expect(primeDB.isPrime.bind(primeDB,42,(()->)))
+        expect(primeDB.getPosition.bind(primeDB,42,(()->)))
           .to.not.throw(TypeError)
 
       it 'when value > max(value), then thow Error',->
@@ -128,28 +128,28 @@ describe 'PrimeDatabaseService',->
           expect(row).to.be.an('object')
           expect(row).to.have.property('rowid')
           expect(row).to.have.property('value')
-        primeDB.isPrime 1, testCallback
+        primeDB.getPosition 1, testCallback
 
       it 'should have input=value',->
         value=23
         testCallback=(row)->
           expect(row.value).to.equal value
-        primeDB.isPrime value, testCallback
+        primeDB.getPosition value, testCallback
 
       it 'when input=1, then rowid=null',->
         testCallback=(row)->
           expect(row.rowid).to.equal null
-        primeDB.isPrime 1, testCallback
+        primeDB.getPosition 1, testCallback
 
       it 'when input=2, then rowid=1',->
         testCallback=(row)->
           expect(row.rowid).to.equal 1
-        primeDB.isPrime 2, testCallback
+        primeDB.getPosition 2, testCallback
 
       it 'when input=-1, then rowid=null',->
         testCallback=(row)->
           expect(row.rowid).to.equal null
-        primeDB.isPrime -1, testCallback
+        primeDB.getPosition -1, testCallback
 
 # -------------------------
 # GET_PRIMES_BETWEEN_VALUES

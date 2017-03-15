@@ -45,14 +45,24 @@ PrimeDatabaseService = (function() {
     return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.getNth, indice, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
   };
 
-  PrimeDatabaseService.prototype.isPrime = function(value, callback) {
-    VENDOR.winston.debug("isPrime(" + value + ")");
+  PrimeDatabaseService.prototype.getPosition = function(value, callback) {
+    VENDOR.winston.debug("getPosition(" + value + ")");
     LIB.errorManager.checkNonNull(value);
     LIB.errorManager.checkNumber(value);
     LIB.errorManager.checkNonNull(callback);
     LIB.errorManager.checkFunction(callback);
     this._callbackManager = new LIB.CallbackManager(callback);
-    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.isPrime, value, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
+    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.getPosition, value, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
+  };
+
+  PrimeDatabaseService.prototype.getPrimesBetweenValues = function(min, max, callback) {
+    VENDOR.winston.debug("getPrimesBetweenValues(" + min + "," + max + ")");
+    LIB.errorManager.checkNonNull(min);
+    LIB.errorManager.checkNonNull(max);
+    LIB.errorManager.checkNonNull(callback);
+    LIB.errorManager.checkNumber(min);
+    LIB.errorManager.checkNumber(max);
+    return LIB.errorManager.checkFunction(callback);
   };
 
   return PrimeDatabaseService;

@@ -44,7 +44,7 @@ if (VENDOR.program.isPrime) {
     }
     return LIB.exit();
   };
-  new LIB.primeDB().isPrime(parseInt(VENDOR.program.isPrime), print);
+  new LIB.primeDB().getPosition(parseInt(VENDOR.program.isPrime), print);
 }
 
 if (VENDOR.program.index) {
@@ -56,5 +56,5 @@ if (VENDOR.program.index) {
     }
     return LIB.exit();
   };
-  new LIB.primeDB().isPrime(parseInt(VENDOR.program.index), print);
+  new LIB.primeDB().getPosition(parseInt(VENDOR.program.index), print);
 }

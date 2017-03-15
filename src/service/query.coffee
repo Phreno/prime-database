@@ -13,7 +13,7 @@ module.exports=
   WHERE   rowid=?;
   """
 
-  isPrime:"""
+  getPosition:"""
   SELECT  rowid, value
   FROM    prime
   WHERE   value=?;

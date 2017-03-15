@@ -67,10 +67,10 @@ class PrimeDatabaseService
         .close @_callbackManager.onDatabaseConnectionClose
 
   #
-  # Est-ce qu'un nombre est premier
+  # Récupère la position d'un nombre premier
   #
-  isPrime:(value, callback)->
-    VENDOR.winston.debug "isPrime(#{value})"
+  getPosition:(value, callback)->
+    VENDOR.winston.debug "getPosition(#{value})"
 
     LIB.errorManager.checkNonNull value
     LIB.errorManager.checkNumber value
@@ -84,7 +84,7 @@ class PrimeDatabaseService
       CONFIGURATION.mode,
       @_callbackManager.onDatabaseConnectionOpen)
         .get(
-          LIB.query.isPrime,
+          LIB.query.getPosition,
           value,
           @_callbackManager.onItemSelection)
         .close @_callbackManager.onDatabaseConnectionClose
