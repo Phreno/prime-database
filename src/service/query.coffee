@@ -18,3 +18,9 @@ module.exports=
   FROM    prime
   WHERE   value=?;
   """
+
+  getPrimesBetweenValues:"""
+  SELECT  rowid, value
+  FROM    prime
+  WHERE   value >= ? AND value <= ?;
+  """

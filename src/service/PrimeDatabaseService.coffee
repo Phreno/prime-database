@@ -89,4 +89,18 @@ class PrimeDatabaseService
           @_callbackManager.onItemSelection)
         .close @_callbackManager.onDatabaseConnectionClose
 
+  #
+  # Récupère les nombres premiers entre deux valeurs
+  #
+  getPrimesBetweenValues:(min,max,callback)->
+    VENDOR.winston.debug "getPrimesBetweenValues(#{min},#{max})"
+
+    LIB.errorManager.checkNonNull min
+    LIB.errorManager.checkNonNull max
+    LIB.errorManager.checkNonNull callback
+    LIB.errorManager.checkNumber min
+    LIB.errorManager.checkNumber max
+    LIB.errorManager.checkFunction callback
+
+
 module.exports=PrimeDatabaseService
