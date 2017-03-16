@@ -35,28 +35,28 @@ PrimeDatabaseService = (function() {
     this._callbackManager = void 0;
   }
 
-  PrimeDatabaseService.prototype.getNth = function(indice, callback) {
-    VENDOR.winston.debug("getNth(" + indice + ")");
+  PrimeDatabaseService.prototype.nth = function(indice, callback) {
+    VENDOR.winston.debug("nth(" + indice + ")");
     LIB.errorManager.checkNonNull(indice);
     LIB.errorManager.checkNumber(indice);
     LIB.errorManager.checkNonNull(callback);
     LIB.errorManager.checkFunction(callback);
     this._callbackManager = new LIB.CallbackManager(callback);
-    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.getNth, indice, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
+    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.nth, indice, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
   };
 
-  PrimeDatabaseService.prototype.getPosition = function(value, callback) {
-    VENDOR.winston.debug("getPosition(" + value + ")");
+  PrimeDatabaseService.prototype.position = function(value, callback) {
+    VENDOR.winston.debug("position(" + value + ")");
     LIB.errorManager.checkNonNull(value);
     LIB.errorManager.checkNumber(value);
     LIB.errorManager.checkNonNull(callback);
     LIB.errorManager.checkFunction(callback);
     this._callbackManager = new LIB.CallbackManager(callback);
-    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.getPosition, value, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
+    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.position, value, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
   };
 
-  PrimeDatabaseService.prototype.getPrimesBetweenValues = function(min, max, callback) {
-    VENDOR.winston.debug("getPrimesBetweenValues(" + min + "," + max + ")");
+  PrimeDatabaseService.prototype.allValuesIn = function(min, max, callback) {
+    VENDOR.winston.debug("allValuesIn(" + min + "," + max + ")");
     LIB.errorManager.checkNonNull(min);
     LIB.errorManager.checkNonNull(max);
     LIB.errorManager.checkNonNull(callback);

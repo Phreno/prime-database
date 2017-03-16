@@ -9,42 +9,42 @@ constant=
 describe 'PrimeDatabaseService',->
   primeDB=new PrimeDatabaseService constant.DATABASE
 
-# -------
-# GET_NTH
-# -------
+# ---
+# nth
+# ---
 
-  describe 'getNth(index, callback)',->
+  describe 'nth(index, callback)',->
 
     describe 'check errors',->
 
       it 'should throw ReferenceError if no index', ->
-        expect(primeDB.getNth.bind(primeDB)).to.throw(ReferenceError)
+        expect(primeDB.nth.bind(primeDB)).to.throw(ReferenceError)
 
       it 'should not throw ReferenceError if index',->
-        expect(primeDB.getNth.bind(primeDB, 'I\'m a String'))
+        expect(primeDB.nth.bind(primeDB, 'I\'m a String'))
           .to.not.throw(ReferenceError)
 
       it 'should throw TypeError if index != number', ->
-        expect(primeDB.getNth.bind(primeDB, 'I\'m a string'))
+        expect(primeDB.nth.bind(primeDB, 'I\'m a string'))
           .to.throw(TypeError)
 
       it 'should not throw TypeError if typeof index is number',->
-        expect(primeDB.getNth.bind(primeDB, 1))
+        expect(primeDB.nth.bind(primeDB, 1))
           .to.not.throw(TypeError)
 
       it 'should throw ReferenceError if no callback',->
-        expect(primeDB.getNth.bind(primeDB,42)).to.throw(ReferenceError)
+        expect(primeDB.nth.bind(primeDB,42)).to.throw(ReferenceError)
 
       it 'should not throw ReferenceError when callback',->
-        expect(primeDB.getNth.bind(primeDB,42,'dummy'))
+        expect(primeDB.nth.bind(primeDB,42,'dummy'))
           .to.not.throw ReferenceError
 
       it 'should throw TypeError if callback != func',->
-        expect(primeDB.getNth.bind(primeDB,42,'I\'m a string'))
+        expect(primeDB.nth.bind(primeDB,42,'I\'m a string'))
           .to.throw(TypeError)
 
       it 'should not throw TypeError if typeof callback is func',->
-        expect(primeDB.getNth.bind(primeDB,42,(()->)))
+        expect(primeDB.nth.bind(primeDB,42,(()->)))
           .to.not.throw(TypeError)
 
       it 'when indice > max(rowid), then thow Error',->
@@ -58,64 +58,64 @@ describe 'PrimeDatabaseService',->
           expect(row).to.be.an('object')
           expect(row).to.have.property('rowid')
           expect(row).to.have.property('value')
-        primeDB.getNth 1, testCallback
+        primeDB.nth 1, testCallback
 
       it 'should have rowid=indice',->
         indice=23
         testCallback=(row)->
           expect(row.rowid).to.equal indice
-        primeDB.getNth indice, testCallback
+        primeDB.nth indice, testCallback
 
       it 'when indice=1, then value=2',->
         testCallback=(row)->
           expect(row.value).to.equal 2
-        primeDB.getNth 1, testCallback
+        primeDB.nth 1, testCallback
 
       it 'when indice=2, then value=3',->
         testCallback=(row)->
           expect(row.value).to.equal 3
-        primeDB.getNth 2, testCallback
+        primeDB.nth 2, testCallback
 
       it 'when indice=-1, then value=null',->
         testCallback=(row)->
           expect(row.value).to.equal null
-        primeDB.getNth -1, testCallback
+        primeDB.nth -1, testCallback
 # --------
 # IS_PRIME
 # --------
 
-  describe 'getPosition(number, callback)',->
+  describe 'position(number, callback)',->
 
     describe 'check errors',->
 
       it 'should throw ReferenceError if no number', ->
-        expect(primeDB.getPosition.bind(primeDB)).to.throw(ReferenceError)
+        expect(primeDB.position.bind(primeDB)).to.throw(ReferenceError)
 
       it 'should not throw ReferenceError if number',->
-        expect(primeDB.getPosition.bind(primeDB, "dummy"))
+        expect(primeDB.position.bind(primeDB, "dummy"))
           .to.not.throw(ReferenceError)
 
       it 'should throw TypeError if typeof number != number', ->
-        expect(primeDB.getPosition.bind(primeDB, "I'm a string"))
+        expect(primeDB.position.bind(primeDB, "I'm a string"))
           .to.throw(TypeError)
 
       it 'should not throw TypeError if typeof number=number',->
-        expect(primeDB.getPosition.bind(primeDB, 1))
+        expect(primeDB.position.bind(primeDB, 1))
           .to.not.throw(TypeError)
 
       it 'should throw ReferenceError if no callback',->
-        expect(primeDB.getPosition.bind(primeDB,42)).to.throw(ReferenceError)
+        expect(primeDB.position.bind(primeDB,42)).to.throw(ReferenceError)
 
       it 'should not throw ReferenceError if callback',->
-        expect(primeDB.getPosition.bind(primeDB,42,'dummy'))
+        expect(primeDB.position.bind(primeDB,42,'dummy'))
           .to.not.throw ReferenceError
 
       it 'should throw TypeError if callback != func',->
-        expect(primeDB.getPosition.bind(primeDB,42,'I\'m a string'))
+        expect(primeDB.position.bind(primeDB,42,'I\'m a string'))
           .to.throw(TypeError)
 
       it 'should not throw TypeError if typeof callback function',->
-        expect(primeDB.getPosition.bind(primeDB,42,(()->)))
+        expect(primeDB.position.bind(primeDB,42,(()->)))
           .to.not.throw(TypeError)
 
       it 'when value > max(value), then thow Error',->
@@ -128,55 +128,54 @@ describe 'PrimeDatabaseService',->
           expect(row).to.be.an('object')
           expect(row).to.have.property('rowid')
           expect(row).to.have.property('value')
-        primeDB.getPosition 1, testCallback
+        primeDB.position 1, testCallback
 
       it 'should have input=value',->
         value=23
         testCallback=(row)->
           expect(row.value).to.equal value
-        primeDB.getPosition value, testCallback
+        primeDB.position value, testCallback
 
       it 'when input=1, then rowid=null',->
         testCallback=(row)->
           expect(row.rowid).to.equal null
-        primeDB.getPosition 1, testCallback
+        primeDB.position 1, testCallback
 
       it 'when input=2, then rowid=1',->
         testCallback=(row)->
           expect(row.rowid).to.equal 1
-        primeDB.getPosition 2, testCallback
+        primeDB.position 2, testCallback
 
       it 'when input=-1, then rowid=null',->
         testCallback=(row)->
           expect(row.rowid).to.equal null
-        primeDB.getPosition -1, testCallback
+        primeDB.position -1, testCallback
 
-# -------------------------
-# GET_PRIMES_BETWEEN_VALUES
-# -------------------------
-
-  describe 'getPrimesBetweenValues(min,max,callback)',->
+# -------------
+# ALL_VALUES_IN
+# -------------
+  describe 'allValuesIn(min,max,callback)',->
 
     describe 'check errors',->
 
       it 'should throw ReferenceError when no args',->
-        expect(primeDB.getPrimesBetweenValues.bind primeDB)
+        expect(primeDB.allValuesIn.bind primeDB)
           .to.throw ReferenceError
 
       it 'should throw ReferenceError when no max',->
-        expect(primeDB.getPrimesBetweenValues.bind primeDB, 42)
+        expect(primeDB.allValuesIn.bind primeDB, 42)
           .to.throw ReferenceError
 
       it 'should throw ReferenceError when no callback',->
-        expect(primeDB.getPrimesBetweenValues.bind primeDB, 42,42)
+        expect(primeDB.allValuesIn.bind primeDB, 42,42)
           .to.throw ReferenceError
 
       it 'should not throw ReferenceError when all args',->
-        expect(primeDB.getPrimesBetweenValues.bind primeDB, 42, 42, 'dummy')
+        expect(primeDB.allValuesIn.bind primeDB, 42, 42, 'dummy')
           .to.not.throw ReferenceError
 
       it 'should throw TypeError when min != number',->
-        expect(primeDB.getPrimesBetweenValues.bind(
+        expect(primeDB.allValuesIn.bind(
           primeDB
           , 'I\'m a String'
           , 42
@@ -184,7 +183,7 @@ describe 'PrimeDatabaseService',->
         )).to.throw TypeError
 
       it 'should throw TypeError when max != number',->
-        expect(primeDB.getPrimesBetweenValues.bind(
+        expect(primeDB.allValuesIn.bind(
           primeDB
           , 42
           , 'I\'m a String'
@@ -192,7 +191,7 @@ describe 'PrimeDatabaseService',->
         )).to.throw TypeError
 
       it 'should throw TypeError when callback != function',->
-        expect(primeDB.getPrimesBetweenValues.bind(
+        expect(primeDB.allValuesIn.bind(
           primeDB
           , 42
           , 42
@@ -200,12 +199,43 @@ describe 'PrimeDatabaseService',->
         )).to.throw TypeError
 
       it 'should not throw TypeError when Type respect number, number, function',->
-        expect(primeDB.getPrimesBetweenValues.bind(
+        expect(primeDB.allValuesIn.bind(
           primeDB
           , 42
           , 42
           , (()->)
         )).to.not.throw TypeError
 
+    describe 'nominal case',->
+      it 'should be implemented',->
+        expect(true).to.equal false
 
+  describe 'eachValuesIn(min,max,callback)',->
+    it 'should be implemented',->
+      expect(true).to.equal false
 
+  describe 'allIndexIn',->
+    describe 'allIndexIn(min,max,callback)', ->
+      it 'should be implemented',->
+        expect(true).to.equal false
+
+    describe 'allIndexIn(array,callback)',->
+      it 'should be implemented',->
+        expect(true).to.equal false
+
+  describe 'eachIndexIn',->
+    describe 'eachIndexIn(min,max,array)',->
+      it 'should be implemented',->
+        expect(true).to.equal false
+
+    describe 'eachIndexIn',->
+      it 'should be implemented',->
+        expect(true).to.equal false
+
+  describe 'next', ->
+    it 'should be implemented',->
+      expect(true).to.equal false
+
+  describe 'previous',->
+    it 'should be implemented',->
+      expect(true).to.equal false

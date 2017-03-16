@@ -61,7 +61,7 @@ if VENDOR.program.nth
 
   new LIB
     .primeDB()
-    .getNth parseInt(VENDOR.program.nth), print
+    .nth parseInt(VENDOR.program.nth), print
 
 if VENDOR.program.isPrime
   print=(row)->
@@ -72,7 +72,7 @@ if VENDOR.program.isPrime
 
   new LIB
     .primeDB()
-    .getPosition parseInt(VENDOR.program.isPrime), print
+    .position parseInt(VENDOR.program.isPrime), print
 
 if VENDOR.program.index
   print=(row)->
@@ -83,5 +83,4 @@ if VENDOR.program.index
 
   new LIB
     .primeDB()
-    .getPosition parseInt(VENDOR.program.index), print
-
+    .position parseInt(VENDOR.program.index), print

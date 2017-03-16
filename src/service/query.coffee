@@ -7,19 +7,19 @@
 # Remarque .......:
 
 module.exports=
-  getNth:"""
+  nth:"""
   SELECT  rowid, value
   FROM    prime
   WHERE   rowid=?;
   """
 
-  getPosition:"""
+  position:"""
   SELECT  rowid, value
   FROM    prime
   WHERE   value=?;
   """
 
-  getPrimesBetweenValues:"""
+  allValuesIn:"""
   SELECT  rowid, value
   FROM    prime
   WHERE   value >= ? AND value <= ?;

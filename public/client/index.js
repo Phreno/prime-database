@@ -32,7 +32,7 @@ if (VENDOR.program.nth) {
     console.log(row.value);
     return LIB.exit();
   };
-  new LIB.primeDB().getNth(parseInt(VENDOR.program.nth), print);
+  new LIB.primeDB().nth(parseInt(VENDOR.program.nth), print);
 }
 
 if (VENDOR.program.isPrime) {
@@ -44,7 +44,7 @@ if (VENDOR.program.isPrime) {
     }
     return LIB.exit();
   };
-  new LIB.primeDB().getPosition(parseInt(VENDOR.program.isPrime), print);
+  new LIB.primeDB().position(parseInt(VENDOR.program.isPrime), print);
 }
 
 if (VENDOR.program.index) {
@@ -56,5 +56,5 @@ if (VENDOR.program.index) {
     }
     return LIB.exit();
   };
-  new LIB.primeDB().getPosition(parseInt(VENDOR.program.index), print);
+  new LIB.primeDB().position(parseInt(VENDOR.program.index), print);
 }

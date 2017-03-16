@@ -46,8 +46,8 @@ class PrimeDatabaseService
   #
   # Récupère le nième nombre premier
   #
-  getNth:(indice, callback)->
-    VENDOR.winston.debug "getNth(#{indice})"
+  nth:(indice, callback)->
+    VENDOR.winston.debug "nth(#{indice})"
 
     LIB.errorManager.checkNonNull indice
     LIB.errorManager.checkNumber indice
@@ -61,7 +61,7 @@ class PrimeDatabaseService
       CONFIGURATION.mode,
       @_callbackManager.onDatabaseConnectionOpen)
         .get(
-          LIB.query.getNth,
+          LIB.query.nth,
           indice,
           @_callbackManager.onItemSelection)
         .close @_callbackManager.onDatabaseConnectionClose
@@ -69,8 +69,8 @@ class PrimeDatabaseService
   #
   # Récupère la position d'un nombre premier
   #
-  getPosition:(value, callback)->
-    VENDOR.winston.debug "getPosition(#{value})"
+  position:(value, callback)->
+    VENDOR.winston.debug "position(#{value})"
 
     LIB.errorManager.checkNonNull value
     LIB.errorManager.checkNumber value
@@ -84,7 +84,7 @@ class PrimeDatabaseService
       CONFIGURATION.mode,
       @_callbackManager.onDatabaseConnectionOpen)
         .get(
-          LIB.query.getPosition,
+          LIB.query.position,
           value,
           @_callbackManager.onItemSelection)
         .close @_callbackManager.onDatabaseConnectionClose
@@ -92,8 +92,8 @@ class PrimeDatabaseService
   #
   # Récupère les nombres premiers entre deux valeurs
   #
-  getPrimesBetweenValues:(min,max,callback)->
-    VENDOR.winston.debug "getPrimesBetweenValues(#{min},#{max})"
+  allValuesIn:(min,max,callback)->
+    VENDOR.winston.debug "allValuesIn(#{min},#{max})"
 
     LIB.errorManager.checkNonNull min
     LIB.errorManager.checkNonNull max
