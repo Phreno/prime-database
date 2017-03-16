@@ -93,6 +93,7 @@ export primeDB_SQL_DIR="${primeDB_DIR}/sql"
 export primeDB_SQL_CREATE="${primeDB_SQL_DIR}/db_create.sql"
 export primeDB_SQL_INSERT="${primeDB_SQL_DIR}/db_insert.sql"
 export primeDB_SQL_IMPORT="${primeDB_SQL_DIR}/db_import.sql"
+export primeDB_SQL_INDEX="${primeDB_SQL_DIR}/db_index.sql"
 
 #
 # TEST
