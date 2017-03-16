@@ -9,10 +9,9 @@ constant=
 describe 'PrimeDatabaseService',->
   primeDB=new PrimeDatabaseService constant.DATABASE
 
-# ---
-# nth
-# ---
-
+  # ---
+  # nth
+  # ---
   describe 'nth(index, callback)',->
 
     describe 'check errors',->
@@ -80,10 +79,9 @@ describe 'PrimeDatabaseService',->
         testCallback=(row)->
           expect(row.value).to.equal null
         primeDB.nth -1, testCallback
-# --------
-# IS_PRIME
-# --------
-
+  # --------
+  # position
+  # --------
   describe 'position(number, callback)',->
 
     describe 'check errors',->
@@ -151,9 +149,9 @@ describe 'PrimeDatabaseService',->
           expect(row.rowid).to.equal null
         primeDB.position -1, testCallback
 
-# -------------
-# ALL_VALUES_IN
-# -------------
+  # -----------
+  # allValuesIn
+  # -----------
   describe 'allValuesIn(min,max,callback)',->
 
     describe 'check errors',->
@@ -207,9 +205,18 @@ describe 'PrimeDatabaseService',->
         )).to.not.throw TypeError
 
     describe 'nominal case',->
+      it 'should work with an array when min and max',->
+        testCallback=(arr)->
+          expect({}.toString.call arr).to.equal '[object Array]'
+          console.log typeof({}.toString.call arr)
+        primeDB.allValuesIn 1, 42, testCallback
+
       it 'should be implemented',->
         expect(true).to.equal false
 
+  # ------------
+  # eachValuesIn
+  # ------------
   describe 'eachValuesIn(min,max,callback)',->
     it 'should be implemented',->
       expect(true).to.equal false

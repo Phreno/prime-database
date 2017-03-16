@@ -33,13 +33,9 @@ class CallbackManager
     CallbackManager
     """
 
-  # Récupération du résultat
+  # Récupération du résultat unique
   onItemSelection:(err,row)->
-    VENDOR.winston.debug """
-    onItemSelection(
-    #{JSON.stringify err, null, 2},
-    #{JSON.stringify row, null, 2})
-    """
+    VENDOR.winston.debug "onItemSelection()"
     LIB.errorManager.checkError err
 
     # Force la récupération d'un résultat
@@ -49,6 +45,17 @@ class CallbackManager
       value:null
 
     doStuff row
+
+  # Récupération du tableau de résultat
+  onArraySelection:(err,arr)->
+    VENDOR.winston.debug "onArraySelection"
+    LIB.errorManager.checkError err
+
+    # Force la récupération du résultat
+    if arr is null or arr is undefined
+      arr=[]
+
+    doStuff arr
 
   # Fermeture de la connexion à la base de données
   onDatabaseConnectionClose:(err)->

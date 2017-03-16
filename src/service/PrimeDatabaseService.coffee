@@ -102,5 +102,16 @@ class PrimeDatabaseService
     LIB.errorManager.checkNumber max
     LIB.errorManager.checkFunction callback
 
+    @_callbackManager=new LIB.CallbackManager callback
+
+    new VENDOR.sqlite.Database(
+      CONFIGURATION.database,
+      CONFIGURATION.mode,
+      @_callbackManager.onDatabaseConnectionOpen)
+        .all(
+          LIB.query.allValuesIn,
+          min, max,
+          @_callbackManager.onArraySelection)
+        .close @_callbackManage.onDatabaseConnectionClose
 
 module.exports=PrimeDatabaseService
