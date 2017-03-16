@@ -29,12 +29,13 @@ VENDOR=
 ext=__filename.match /\.[a-zA-Z]+$/
 service=__dirname.replace /client.*$/, "service/PrimeDatabaseService#{ext}"
 
-exit=->
-  process.exit 0
+# --------------------
+# Dépendances internes
+# --------------------
 
 LIB=
   primeDB:require service
-  exit:exit
+  printer:new (require './Printer')()
 
 # --------------
 # Initialisation
@@ -55,32 +56,13 @@ VENDOR.program
   .parse process.argv
 
 if VENDOR.program.nth
-  print=(row)->
-    console.log row.value
-    LIB.exit()
-
-  new LIB
-    .primeDB()
-    .nth parseInt(VENDOR.program.nth), print
+  new LIB.primeDB()
+    .nth parseInt(VENDOR.program.nth), LIB.printer.nth
 
 if VENDOR.program.isPrime
-  print=(row)->
-    if row.rowid isnt null
-      console.log 'true'
-    else console.log 'false'
-    LIB.exit()
-
-  new LIB
-    .primeDB()
-    .position parseInt(VENDOR.program.isPrime), print
+  new LIB.primeDB()
+    .position parseInt(VENDOR.program.isPrime), LIB.printer.isPrime
 
 if VENDOR.program.index
-  print=(row)->
-    if row.rowid isnt null
-      console.log row.rowid
-    else console.log 'false'
-    LIB.exit()
-
-  new LIB
-    .primeDB()
-    .position parseInt(VENDOR.program.index), print
+  new LIB.primeDB()
+    .position parseInt(VENDOR.program.index), LIB.printer.index

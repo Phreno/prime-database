@@ -1,4 +1,4 @@
-var CONSTANT, LIB, VENDOR, bundle, exit, ext, extra, print, service;
+var CONSTANT, LIB, VENDOR, bundle, ext, extra, service;
 
 bundle = "/package.json";
 
@@ -16,45 +16,21 @@ ext = __filename.match(/\.[a-zA-Z]+$/);
 
 service = __dirname.replace(/client.*$/, "service/PrimeDatabaseService" + ext);
 
-exit = function() {
-  return process.exit(0);
-};
-
 LIB = {
   primeDB: require(service),
-  exit: exit
+  printer: new (require('./Printer'))()
 };
 
 VENDOR.program.version(CONSTANT.version).option('-n, --nth [number]', 'Donne la valeur du nombre premier à l\'indice n').option('-p, --isPrime [number]', 'Détermine si le p est un nombre premier').option('-i, --index [number]', 'Renvoie la position de P dans le set des nombres premiers').parse(process.argv);
 
 if (VENDOR.program.nth) {
-  print = function(row) {
-    console.log(row.value);
-    return LIB.exit();
-  };
-  new LIB.primeDB().nth(parseInt(VENDOR.program.nth), print);
+  new LIB.primeDB().nth(parseInt(VENDOR.program.nth), LIB.printer.nth);
 }
 
 if (VENDOR.program.isPrime) {
-  print = function(row) {
-    if (row.rowid !== null) {
-      console.log('true');
-    } else {
-      console.log('false');
-    }
-    return LIB.exit();
-  };
-  new LIB.primeDB().position(parseInt(VENDOR.program.isPrime), print);
+  new LIB.primeDB().position(parseInt(VENDOR.program.isPrime), LIB.printer.isPrime);
 }
 
 if (VENDOR.program.index) {
-  print = function(row) {
-    if (row.rowid !== null) {
-      console.log(row.rowid);
-    } else {
-      console.log('false');
-    }
-    return LIB.exit();
-  };
-  new LIB.primeDB().position(parseInt(VENDOR.program.index), print);
+  new LIB.primeDB().position(parseInt(VENDOR.program.index), LIB.printer.index);
 }
