@@ -193,3 +193,14 @@ primeDB_setup_importCsv(){
   scriptImport="$( cat "${scriptImport}" | sed "s/file/${csv}/g" )"
   echo "${scriptImport}" | sqlite3 "${database}"
 }
+
+#
+# Index les valeurs des nombres premiers pour accélérer la recherche
+#
+primeDB_setup_indexValues(){
+  database="${1:-${primeDB_DATABASE?}}"
+  scriptIndex="${2:-${primeDB_SQL_INDEX?}}"
+
+  echo ".. INFO Index database values"
+  cat "${scriptIndex}" | sqlite3 "${database}"
+}

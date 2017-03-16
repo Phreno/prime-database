@@ -75,6 +75,7 @@ primeDB_load(){
   echo ">> INFO import csv (could take a while)"
   primeDB_setup_createDB
   primeDB_setup_importCsv
+  primeDB_setup_indexValues
   echo ">> INFO import done"
   echo "${empty}"
 }
