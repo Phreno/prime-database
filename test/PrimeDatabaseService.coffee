@@ -205,11 +205,23 @@ describe 'PrimeDatabaseService',->
         )).to.not.throw TypeError
 
     describe 'nominal case',->
+#
+# FIXME: TEST FOIREUX, ils passent alors qu'ils devraient échouer !!!! Probleme de callback ?
       it 'should work with an array when min and max',->
         testCallback=(arr)->
           expect({}.toString.call arr).to.equal '[object Array]'
-          console.log typeof({}.toString.call arr)
         primeDB.allValuesIn 1, 42, testCallback
+
+      it 'should work with an array when min=max=0 (no results)',->
+        testCallback=(arr)->
+          expect({}.toString.call arr).to.equal '[object Array]'
+        primeDB.allValuesIn 0, 0, testCallback
+
+      it 'should revert min and max if min > max', ->
+        testiCallback=(arr)->
+          expect(arr.length).to.equal(1)
+          expect(true).to.be false
+        primeDB.allValuesIn 0, 0, testiCallback
 
       it 'should be implemented',->
         expect(true).to.equal false

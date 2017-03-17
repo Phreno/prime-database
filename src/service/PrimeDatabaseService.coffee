@@ -112,6 +112,6 @@ class PrimeDatabaseService
           LIB.query.allValuesIn,
           min, max,
           @_callbackManager.onArraySelection)
-        .close @_callbackManage.onDatabaseConnectionClose
+        .close @_callbackManager.onDatabaseConnectionClose
 
 module.exports=PrimeDatabaseService
