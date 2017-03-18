@@ -13,9 +13,6 @@ constant=
 describe 'PrimeDatabaseService',->
   primeDB=new PrimeDatabaseService constant.DATABASE
 
-  # ---
-  # nth
-  # ---
   describe 'nth(index, callback)',->
 
     describe 'check errors',->

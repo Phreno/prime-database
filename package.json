@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register",
+    "test": "mocha $(find test -name '*.coffee') --compilers coffee:coffee-script/register",
     "install": "bash ./database/bin/primeDB_setup"
   },
   "repository": {
