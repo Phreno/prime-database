@@ -3,7 +3,7 @@
 # --------------------
 VENDOR=
   winston:require 'winston'
-  sqlite:require 'sqlite3'
+  q_sqlite:require 'q-sqlite3'
 
 # ------------------------
 # Configuration du service
@@ -14,14 +14,17 @@ logFile=__filename.replace(/\w+\/service/, '/log')
 # Les logs ont l'extension .log
 logFile=logFile.replace(/\.\w+$/, '.log')
 
-CONFIGURATION=
-  database: __dirname.replace /\w+\/\w+$/, "database/data/primeDB.db"
-  mode:VENDOR.sqlite.OPEN_READONLY
+CONTEXT=
+  database:
+    path:__dirname.replace /\w+\/\w+$/, "database/data/primeDB.db"
+    instance:undefined
+    maxValue:982451653
+    maxId:50000000
   logFile:
     filename: logFile
 
 do configureWinston=->
-  VENDOR.winston.add(VENDOR.winston.transports.File, CONFIGURATION.logFile)
+  VENDOR.winston.add(VENDOR.winston.transports.File, CONTEXT.logFile)
   VENDOR.winston.remove(VENDOR.winston.transports.Console)
   VENDOR.winston.level='debug'
 
@@ -31,87 +34,41 @@ do configureWinston=->
 LIB =
   query:require './query'
   errorManager:new (require './ErrorManager')()
-  CallbackManager:require './CallbackManager'
+  #CallbackManager:require './CallbackManager'
 
 # =======================================
 # Service de requêtage de nombre premiers
 # =======================================
 class PrimeDatabaseService
   constructor:->
-    VENDOR.winston.debug """
-    PrimeDatabaseService()
-    """
-    @_callbackManager=undefined
+    VENDOR
+      .winston
+      .debug "PrimeDatabaseService()"
+
+    VENDOR
+      .q_sqlite
+      .createDatabase CONTEXT.database.path
+      .done((instance) -> CONTEXT.database.instance = instance)
+
+  #
+  # Récupère le context de la base de données
+  #
+  context:CONTEXT
 
   #
   # Récupère le nième nombre premier
   #
   nth:(indice, callback)->
-    VENDOR.winston.debug "nth(#{indice})"
-
-    LIB.errorManager.checkNonNull indice
-    LIB.errorManager.checkNumber indice
-    LIB.errorManager.checkNonNull callback
-    LIB.errorManager.checkFunction callback
-
-    @_callbackManager=new LIB.CallbackManager callback
-    #TODO:Faire une database Factory
-    new VENDOR.sqlite.Database(
-      CONFIGURATION.database,
-      CONFIGURATION.mode,
-      @_callbackManager.onDatabaseConnectionOpen)
-        .get(
-          LIB.query.nth,
-          indice,
-          @_callbackManager.onItemSelection)
-        .close @_callbackManager.onDatabaseConnectionClose
-
-  #
-  # Récupère la position d'un nombre premier
-  #
-  position:(value, callback)->
-    VENDOR.winston.debug "position(#{value})"
-
-    LIB.errorManager.checkNonNull value
-    LIB.errorManager.checkNumber value
-    LIB.errorManager.checkNonNull callback
-    LIB.errorManager.checkFunction callback
-
-    @_callbackManager=new LIB.CallbackManager callback
-
-    new VENDOR.sqlite.Database(
-      CONFIGURATION.database,
-      CONFIGURATION.mode,
-      @_callbackManager.onDatabaseConnectionOpen)
-        .get(
-          LIB.query.position,
-          value,
-          @_callbackManager.onItemSelection)
-        .close @_callbackManager.onDatabaseConnectionClose
-
-  #
-  # Récupère les nombres premiers entre deux valeurs
-  #
-  allValuesIn:(min,max,callback)->
-    VENDOR.winston.debug "allValuesIn(#{min},#{max})"
-
-    LIB.errorManager.checkNonNull min
-    LIB.errorManager.checkNonNull max
-    LIB.errorManager.checkNonNull callback
-    LIB.errorManager.checkNumber min
-    LIB.errorManager.checkNumber max
-    LIB.errorManager.checkFunction callback
-
-    @_callbackManager=new LIB.CallbackManager callback
-
-    new VENDOR.sqlite.Database(
-      CONFIGURATION.database,
-      CONFIGURATION.mode,
-      @_callbackManager.onDatabaseConnectionOpen)
-        .all(
-          LIB.query.allValuesIn,
-          min, max,
-          @_callbackManager.onArraySelection)
-        .close @_callbackManager.onDatabaseConnectionClose
+    LIB.errorManager.checkNonNullNumber indice
+    LIB.errorManager.checkNonNullFunction callback
+    doStuff = (row)->
+      row = { rowid:indice, value:null } if !row?
+      row.value = undefined if row.rowid > CONTEXT.database.maxId
+      callback row
+    CONTEXT
+      .database
+      .instance
+      .get LIB.query.nth, indice
+      .then doStuff
 
 module.exports=PrimeDatabaseService

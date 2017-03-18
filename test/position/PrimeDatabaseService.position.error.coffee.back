@@ -14,9 +14,6 @@ CONSTANT=
 describe 'PrimeDatabaseService',->
   primeDB=new PrimeDatabaseService CONSTANT.DATABASE
 
-  # --------
-  # position
-  # --------
   describe 'position(number, callback)',->
 
     describe 'check errors',->
@@ -53,34 +50,4 @@ describe 'PrimeDatabaseService',->
 
       it 'when value > max(value), then thow Error',->
         expect(true).to.equal false
-
-    describe 'nominal case',->
-
-      it 'should work with an object when indice is provided',->
-        testCallback=(row)->
-          expect(row).to.be.an('object')
-          expect(row).to.have.property('rowid')
-          expect(row).to.have.property('value')
-        primeDB.position 1, testCallback
-
-      it 'should have input=value',->
-        value=23
-        testCallback=(row)->
-          expect(row.value).to.equal value
-        primeDB.position value, testCallback
-
-      it 'when input=1, then rowid=null',->
-        testCallback=(row)->
-          expect(row.rowid).to.equal null
-        primeDB.position 1, testCallback
-
-      it 'when input=2, then rowid=1',->
-        testCallback=(row)->
-          expect(row.rowid).to.equal 1
-        primeDB.position 2, testCallback
-
-      it 'when input=-1, then rowid=null',->
-        testCallback=(row)->
-          expect(row.rowid).to.equal null
-        primeDB.position -1, testCallback
 

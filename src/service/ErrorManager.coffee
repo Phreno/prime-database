@@ -12,41 +12,49 @@
 VENDOR=
   winston:require 'winston'
 
+checkNonNull=(variable, message='ne peut pas etre null')->
+  if !variable?
+    err=new ReferenceError message
+    VENDOR.winston.error err
+    throw err
+    process.exit 1
+
+checkNumber=(variable, message='doit être un nombre')->
+  if typeof variable isnt "number"
+    err=new TypeError message
+    VENDOR.winston.error err
+    throw err
+    process.exit 1
+
+checkFunction=(variable, message='doit être une fonction')->
+  if typeof variable isnt "function"
+    err=new TypeError message
+    VENDOR.winston.error err
+    throw err
+    process.exit 1
+
+checkError=(error)->
+  if error
+    VENDOR.winston.error error
+    throw error
+    process.exit 1
 # -------------------
 # Gestion des Erreurs
 # -------------------
 
 class ErrorManager
   constructor:->
-    VENDOR.winston.debug """
-    ErrorManager()
-    """
+    VENDOR.winston.debug 'ErrorManager()'
 
-  checkNonNull:(variable, message='ne peut pas etre null')->
-    if !variable?
-      err=new ReferenceError message
-      VENDOR.winston.error err
-      throw err
-      process.exit 1
-
-  checkNumber:(variable, message='doit être un nombre')->
-    if typeof variable isnt "number"
-      err=new TypeError message
-      VENDOR.winston.error err
-      throw err
-      process.exit 1
-
-  checkFunction:(variable, message='doit être une fonction')->
-    if typeof variable isnt "function"
-      err=new TypeError message
-      VENDOR.winston.error err
-      throw err
-      process.exit 1
-
-  checkError:(error)->
-    if error
-      VENDOR.winston.error error
-      throw error
-      process.exit 1
+  checkNonNull:checkNonNull
+  checkNumber:checkNumber
+  checkFunction:checkFunction
+  checkError:checkError
+  checkNonNullNumber:(variable, message='doit être un nombre non null')->
+    checkNonNull variable
+    checkNumber variable
+  checkNonNullFunction:(variable, message='doit être une fonction non nulle')->
+    checkNonNull variable
+    checkFunction variable
 
 module.exports=ErrorManager
