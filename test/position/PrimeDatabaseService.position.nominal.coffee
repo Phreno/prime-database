@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 # Développeur ....: K3rn€l_P4n1K
-# Description ....: PrimeDatabaseService.nth.error - 1.0
+# Description ....: PrimeDatabaseService.position.nominal - 1.0
 # ................. Sat Mar 18 16:33:21 CET 2017
 # Plateformes ....: Ubuntu
 
@@ -17,31 +17,24 @@ describe 'PrimeDatabaseService',->
   primeDB = new PrimeDatabaseService()
   describe 'position(number, callback)',->
     describe 'nominal case',->
-      it 'should work with an object when indice is provided',->
-        testCallback=(row)->
-          expect(row).to.be.an('object')
-          expect(row).to.have.property('rowid')
-          expect(row).to.have.property('value')
-        primeDB.position 1, testCallback
-
-      it 'should have input=value',->
-        value=23
-        testCallback=(row)->
-          expect(row.value).to.equal value
-        primeDB.position value, testCallback
-
-      it 'when input=1, then rowid=null',->
-        testCallback=(row)->
-          expect(row.rowid).to.equal null
-        primeDB.position 1, testCallback
-
-      it 'when input=2, then rowid=1',->
-        testCallback=(row)->
-          expect(row.rowid).to.equal 1
-        primeDB.position 2, testCallback
-
-      it 'when input=-1, then rowid=null',->
-        testCallback=(row)->
-          expect(row.rowid).to.equal null
-        primeDB.position -1, testCallback
+      it 'should be an object',->
+        primeDB.position 42, (row)-> expect(row).to.be.an('object')
+      it 'should have property rowid',->
+        primeDB.position 42, (row)-> expect(row).to.have.property('rowid')
+      it 'should have property value',->
+        primeDB.position 42, (row)-> expect(row).to.have.property('value')
+      it 'should have value=-1 when input=-1',->
+        primeDB.position -1, (row)-> expect(row.value).to.equal -1
+      it 'should have value=0 when input=0',->
+        primeDB.position 0, (row)-> expect(row.value).to.equal 0
+      it 'should have value=1 when input=1',->
+        primeDB.position 1, (row)-> expect(row.value).to.equal 1
+      it 'should have rowid=null when value=-1',->
+        primeDB.position -1, (row)-> expect(row.rowid).to.equal null
+      it 'should have rowid=undefined when value>maxValue',->
+        primeDB.position(
+          (primeDB.context.database.maxValue+1)
+          ,(row)->expect(row.rowid).to.equal undefined)
+      it 'should have rowid=1 when value=2',->
+        primeDB.position 2, (row)-> expect(row.rowid).to.equal 1
 
