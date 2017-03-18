@@ -5,7 +5,7 @@ expect=chai.expect
 assert=chai.assert
 path=__dirname.replace '/test', '/src/service'
 
-PrimeDatabaseService=require "#{path}/PrimeDatabaseServîce"
+PrimeDatabaseService=require "#{path}/PrimeDatabaseService"
 
 CONSTANT=
   DATABASE:'../database/data/primeDB.db'

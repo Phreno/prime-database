@@ -1,11 +1,15 @@
 chai=require 'chai'
-expect=chai.expect
+chaiAsPromised = require 'chai-as-promised'
 
-PrimeDatabaseService=require __filename.replace '/test', '/src/service'
+expect=chai.expect
+assert=chai.assert
+path=__dirname.replace '/test', '/src/service'
+
+PrimeDatabaseService=require "#{path}/PrimeDatabaseService"
+
 constant=
   DATABASE:'../database/data/primeDB.db'
 
-#TODO:split test files
 describe 'PrimeDatabaseService',->
   primeDB=new PrimeDatabaseService constant.DATABASE
 

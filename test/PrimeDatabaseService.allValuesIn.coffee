@@ -5,7 +5,7 @@ expect=chai.expect
 assert=chai.assert
 path=__dirname.replace '/test', '/src/service'
 
-PrimeDatabaseService=require "#{path}/PrimeDatabaseServîce"
+PrimeDatabaseService=require "#{path}/PrimeDatabaseService"
 
 CONSTANT=
   DATABASE:'../database/data/primeDB.db'
@@ -61,7 +61,7 @@ describe 'PrimeDatabaseService',->
           , 'I\'m a String'
         )).to.throw TypeError
 
-      it 'should not throw TypeError when Type respect number, number, function',->
+      it 'should not throw TypeError when respect number, number, function',->
         expect(primeDB.allValuesIn.bind(
           primeDB
           , 42
@@ -71,7 +71,8 @@ describe 'PrimeDatabaseService',->
 
     describe 'nominal case',->
 #
-# FIXME: TEST FOIREUX, ils passent alors qu'ils devraient échouer !!!! Probleme de callback ?
+# FIXME: TEST FOIREUX, ils passent alors qu'ils devraient échouer
+# !!!! Probleme de callback ?
       it 'should work with an array when min and max',->
         testCallback=(arr)->
           expect({}.toString.call arr).to.equal '[object Array]'
@@ -91,35 +92,3 @@ describe 'PrimeDatabaseService',->
       it 'should be implemented',->
         expect(true).to.equal false
 
-  # ------------
-  # eachValuesIn
-  # ------------
-  describe 'eachValuesIn(min,max,callback)',->
-    it 'should be implemented',->
-      expect(true).to.equal false
-
-  describe 'allIndexIn',->
-    describe 'allIndexIn(min,max,callback)', ->
-      it 'should be implemented',->
-        expect(true).to.equal false
-
-    describe 'allIndexIn(array,callback)',->
-      it 'should be implemented',->
-        expect(true).to.equal false
-
-  describe 'eachIndexIn',->
-    describe 'eachIndexIn(min,max,array)',->
-      it 'should be implemented',->
-        expect(true).to.equal false
-
-    describe 'eachIndexIn',->
-      it 'should be implemented',->
-        expect(true).to.equal false
-
-  describe 'next', ->
-    it 'should be implemented',->
-      expect(true).to.equal false
-
-  describe 'previous',->
-    it 'should be implemented',->
-      expect(true).to.equal false
