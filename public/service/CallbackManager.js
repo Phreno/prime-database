@@ -17,7 +17,7 @@ CallbackManager = (function() {
   }
 
   CallbackManager.prototype.onItemSelection = function(err, row) {
-    VENDOR.winston.debug("onItemSelection(\n" + (JSON.stringify(err, null, 2)) + ",\n" + (JSON.stringify(row, null, 2)) + ")");
+    VENDOR.winston.debug("onItemSelection()");
     LIB.errorManager.checkError(err);
     if (row === null || row === void 0) {
       row = {
@@ -26,6 +26,15 @@ CallbackManager = (function() {
       };
     }
     return doStuff(row);
+  };
+
+  CallbackManager.prototype.onArraySelection = function(err, arr) {
+    VENDOR.winston.debug("onArraySelection");
+    LIB.errorManager.checkError(err);
+    if (arr === null || arr === void 0) {
+      arr = [];
+    }
+    return doStuff(arr);
   };
 
   CallbackManager.prototype.onDatabaseConnectionClose = function(err) {

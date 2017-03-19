@@ -1,68 +1,98 @@
-var CONFIGURATION, LIB, PrimeDatabaseService, VENDOR, configureWinston, logFile;
+var CONTEXT, LIB, PrimeDatabaseService, VENDOR, configureWinston, logFile;
 
 VENDOR = {
   winston: require('winston'),
-  sqlite: require('sqlite3')
+  q_sqlite: require('q-sqlite3')
 };
 
 logFile = __filename.replace(/\w+\/service/, '/log');
 
 logFile = logFile.replace(/\.\w+$/, '.log');
 
-CONFIGURATION = {
-  database: __dirname.replace(/\w+\/\w+$/, "database/data/primeDB.db"),
-  mode: VENDOR.sqlite.OPEN_READONLY,
+CONTEXT = {
+  database: {
+    path: __dirname.replace(/\w+\/\w+$/, "database/data/primeDB.db"),
+    instance: void 0,
+    maxValue: 982451653,
+    maxId: 50000000
+  },
   logFile: {
     filename: logFile
   }
 };
 
 (configureWinston = function() {
-  VENDOR.winston.add(VENDOR.winston.transports.File, CONFIGURATION.logFile);
+  VENDOR.winston.add(VENDOR.winston.transports.File, CONTEXT.logFile);
   VENDOR.winston.remove(VENDOR.winston.transports.Console);
   return VENDOR.winston.level = 'debug';
 })();
 
 LIB = {
   query: require('./query'),
-  errorManager: new (require('./ErrorManager'))(),
-  CallbackManager: require('./CallbackManager')
+  errorManager: new (require('./ErrorManager'))(CONTEXT)
 };
 
 PrimeDatabaseService = (function() {
   function PrimeDatabaseService() {
     VENDOR.winston.debug("PrimeDatabaseService()");
-    this._callbackManager = void 0;
+    VENDOR.q_sqlite.createDatabase(CONTEXT.database.path).done(function(instance) {
+      return CONTEXT.database.instance = instance;
+    });
   }
 
+  PrimeDatabaseService.prototype.context = CONTEXT;
+
   PrimeDatabaseService.prototype.nth = function(indice, callback) {
-    VENDOR.winston.debug("nth(" + indice + ")");
-    LIB.errorManager.checkNonNull(indice);
-    LIB.errorManager.checkNumber(indice);
-    LIB.errorManager.checkNonNull(callback);
-    LIB.errorManager.checkFunction(callback);
-    this._callbackManager = new LIB.CallbackManager(callback);
-    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.nth, indice, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
+    var doStuff;
+    LIB.errorManager.checkMaxIndex(indice);
+    LIB.errorManager.checkNonNullFunction(callback);
+    doStuff = function(row) {
+      if (row == null) {
+        row = {
+          rowid: indice,
+          value: null
+        };
+      }
+      return callback(row);
+    };
+    return CONTEXT.database.instance.get(LIB.query.nth, indice).then(doStuff);
   };
 
   PrimeDatabaseService.prototype.position = function(value, callback) {
-    VENDOR.winston.debug("position(" + value + ")");
-    LIB.errorManager.checkNonNull(value);
-    LIB.errorManager.checkNumber(value);
-    LIB.errorManager.checkNonNull(callback);
-    LIB.errorManager.checkFunction(callback);
-    this._callbackManager = new LIB.CallbackManager(callback);
-    return new VENDOR.sqlite.Database(CONFIGURATION.database, CONFIGURATION.mode, this._callbackManager.onDatabaseConnectionOpen).get(LIB.query.position, value, this._callbackManager.onItemSelection).close(this._callbackManager.onDatabaseConnectionClose);
+    var doStuff;
+    LIB.errorManager.checkMaxValue(value);
+    LIB.errorManager.checkNonNullFunction(callback);
+    doStuff = function(row) {
+      if (row == null) {
+        row = {
+          rowid: null,
+          value: value
+        };
+      }
+      return callback(row);
+    };
+    return CONTEXT.database.instance.get(LIB.query.position, value).then(doStuff);
   };
 
   PrimeDatabaseService.prototype.allValuesIn = function(min, max, callback) {
-    VENDOR.winston.debug("allValuesIn(" + min + "," + max + ")");
-    LIB.errorManager.checkNonNull(min);
-    LIB.errorManager.checkNonNull(max);
-    LIB.errorManager.checkNonNull(callback);
-    LIB.errorManager.checkNumber(min);
-    LIB.errorManager.checkNumber(max);
-    return LIB.errorManager.checkFunction(callback);
+    var doStuff, ref;
+    LIB.errorManager.checkNonNullNumber(min);
+    LIB.errorManager.checkNonNullNumber(max);
+    LIB.errorManager.checkNonNullFunction(callback);
+    if (min > max) {
+      ref = [max, min], min = ref[0], max = ref[1];
+    }
+    LIB.errorManager.checkMaxValue(max);
+    doStuff = function(arr) {
+      if (arr == null) {
+        arr = [];
+      }
+      return callback(arr);
+    };
+    return CONTEXT.database.instance.all(LIB.query.allValuesIn, {
+      $min: min,
+      $max: max
+    }).then(doStuff);
   };
 
   return PrimeDatabaseService;
