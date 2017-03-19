@@ -31,10 +31,5 @@ describe 'PrimeDatabaseService',->
         primeDB.position 1, (row)-> expect(row.value).to.equal 1
       it 'should have rowid=null when value=-1',->
         primeDB.position -1, (row)-> expect(row.rowid).to.equal null
-      it 'should have rowid=undefined when value>maxValue',->
-        primeDB.position(
-          (primeDB.context.database.maxValue+1)
-          ,(row)->expect(row.rowid).to.equal undefined)
       it 'should have rowid=1 when value=2',->
         primeDB.position 2, (row)-> expect(row.rowid).to.equal 1
-

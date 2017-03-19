@@ -31,10 +31,6 @@ describe 'PrimeDatabaseService',->
         primeDB.nth 1, (row)-> expect(row.rowid).to.equal 1
       it 'should have value=null when indice=-1',->
         primeDB.nth -1, (row)-> expect(row.value).to.equal null
-      it 'should have value=undefined when indice>maxId',->
-        primeDB.nth(
-          (primeDB.context.database.maxId + 1)
-          ,(row)-> expect(row.value).to.equal undefined)
       it 'should have value=2 when indice=1',->
         primeDB.nth 1, (row)-> expect(row.value).to.equal 2
       it 'should have value=3 when indice=2',->

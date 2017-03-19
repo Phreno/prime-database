@@ -39,3 +39,8 @@ describe 'PrimeDatabaseService',->
       it 'should not throw TypeError if typeof callback is func',->
         expect(primeDB.nth.bind(primeDB,42,(()->)))
           .to.not.throw(TypeError)
+      it 'should throw ReferenceError when id>maxId',->
+        expect(primeDB.nth.bind(
+          primeDB
+          , primeDB.context.database.maxId + 1
+          , (()->))).to.throw ReferenceError

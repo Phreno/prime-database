@@ -22,5 +22,5 @@ module.exports=
   allValuesIn:"""
   SELECT  rowid, value
   FROM    prime
-  WHERE   value >= ? AND value <= ?;
+  WHERE   value >= $min AND value <= $max;
   """

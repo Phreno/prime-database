@@ -33,8 +33,7 @@ do configureWinston=->
 # --------------------
 LIB =
   query:require './query'
-  errorManager:new (require './ErrorManager')()
-  #CallbackManager:require './CallbackManager'
+  errorManager:new (require './ErrorManager')(CONTEXT)
 
 # =======================================
 # Service de requêtage de nombre premiers
@@ -44,7 +43,6 @@ class PrimeDatabaseService
     VENDOR
       .winston
       .debug "PrimeDatabaseService()"
-
     VENDOR
       .q_sqlite
       .createDatabase CONTEXT.database.path
@@ -56,19 +54,42 @@ class PrimeDatabaseService
   context:CONTEXT
 
   #
-  # Récupère le nième nombre premier
+  # Travail avec le nième nombre premier
   #
   nth:(indice, callback)->
-    LIB.errorManager.checkNonNullNumber indice
+    LIB.errorManager.checkMaxIndex indice
     LIB.errorManager.checkNonNullFunction callback
-    doStuff = (row)->
-      row = { rowid:indice, value:null } if !row?
-      row.value = undefined if row.rowid > CONTEXT.database.maxId
+    doStuff=(row)->
+      row = {rowid:indice, value:null} if !row?
       callback row
-    CONTEXT
-      .database
-      .instance
-      .get LIB.query.nth, indice
+    CONTEXT.database.instance.get LIB.query.nth, indice
+      .then doStuff
+
+  #
+  # Travail avec la position du nombre premier passé en paramètre
+  #
+  position:(value, callback)->
+    LIB.errorManager.checkMaxValue value
+    LIB.errorManager.checkNonNullFunction callback
+    doStuff=(row)->
+      row = {rowid:null, value:value} if !row?
+      callback row
+    CONTEXT.database.instance.get LIB.query.position, value
+      .then doStuff
+
+  #
+  # Travail avec les nombres premiers compris entre min & max
+  #
+  allValuesIn:(min, max, callback)->
+    LIB.errorManager.checkNonNullNumber min
+    LIB.errorManager.checkNonNullNumber max
+    LIB.errorManager.checkNonNullFunction callback
+    [min,max]=[max,min] if min>max
+    LIB.errorManager.checkMaxValue max
+    doStuff=(arr)->
+      arr=[] if !arr?
+      callback arr
+    CONTEXT.database.instance.all LIB.query.allValuesIn, {$min:min, $max:max}
       .then doStuff
 
 module.exports=PrimeDatabaseService

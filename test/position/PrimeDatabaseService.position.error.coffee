@@ -39,3 +39,9 @@ describe 'PrimeDatabaseService',->
       it 'should not throw TypeError if typeof callback function',->
         expect(primeDB.position.bind(primeDB,42,(()->)))
           .to.not.throw(TypeError)
+      it 'should throw ReferenceError if value>maxValue',->
+        expect(primeDB.position.bind(
+          primeDB
+          , primeDB.context.database.maxValue + 1
+          , (()->)
+        )).to.throw ReferenceError
