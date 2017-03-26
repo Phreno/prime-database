@@ -11,7 +11,7 @@ logFile = logFile.replace(/\.\w+$/, '.log');
 
 CONTEXT = {
   database: {
-    path: __dirname.replace(/\w+\/\w+$/, "database/data/primeDB.db"),
+    path: __dirname.replace(/\w+\/service$/, "database/data/primeDB.db"),
     instance: void 0,
     maxValue: 982451653,
     maxId: 50000000

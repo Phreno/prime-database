@@ -16,7 +16,7 @@ logFile=logFile.replace(/\.\w+$/, '.log')
 
 CONTEXT=
   database:
-    path:__dirname.replace /\w+\/\w+$/, "database/data/primeDB.db"
+    path:__dirname.replace /\w+\/service$/, "database/data/primeDB.db"
     instance:undefined
     maxValue:982451653
     maxId:50000000
@@ -31,6 +31,31 @@ do configureWinston=->
 # --------------------
 # Dépendances internes
 # --------------------
+
+database = (()->
+  init = ()->
+    setInstance = (instance)->
+      try
+        CONTEXT.database.instance = instance
+        console.log "database loaded"
+      catch err
+        throw err
+
+    VENDOR
+      .q_sqlite
+      .createDatabase CONTEXT.database.path
+      .done setInstance
+
+  {
+    getInstance: ()->
+      if !CONTEXT.database.instance?
+        init()
+      CONTEXT.database.instance
+  }
+)
+
+
+
 LIB =
   query:require './query'
   errorManager:new (require './ErrorManager')(CONTEXT)
@@ -43,10 +68,7 @@ class PrimeDatabaseService
     VENDOR
       .winston
       .debug "PrimeDatabaseService()"
-    VENDOR
-      .q_sqlite
-      .createDatabase CONTEXT.database.path
-      .done((instance) -> CONTEXT.database.instance = instance)
+
 
   #
   # Récupère le context de la base de données
@@ -59,10 +81,14 @@ class PrimeDatabaseService
   nth:(indice, callback)->
     LIB.errorManager.checkMaxIndex indice
     LIB.errorManager.checkNonNullFunction callback
+    LIB.errorManager.checkNonNull(
+      CONTEXT.database.instance
+      "#{CONTEXT.database.path} n'est pas chargé"
+    )
     doStuff=(row)->
       row = {rowid:indice, value:null} if !row?
       callback row
-    CONTEXT.database.instance.get LIB.query.nth, indice
+    database.getInstance().get LIB.query.nth, indice
       .then doStuff
 
   #

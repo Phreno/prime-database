@@ -25,17 +25,23 @@ CONSTANT=
 
 VENDOR=
   program:require 'commander'
-
-ext=__filename.match /\.[a-zA-Z]+$/
-service=__dirname.replace /client.*$/, "service/PrimeDatabaseService#{ext}"
-
 # --------------------
 # Dépendances internes
 # --------------------
 
+TEMP         = {}
+TEMP.ext     = __filename.match /\.[a-zA-Z]+$/
+TEMP.service = __dirname.replace(
+  /client.*$/
+  "service/PrimeDatabaseService#{TEMP.ext}"
+)
+TEMP.PrimeDatabaseService = require TEMP.service
+TEMP.Printer              = require './Printer'
+
 LIB=
-  primeDB:require service
-  printer:new (require './Printer')()
+  #  primeDB:new (require service)()
+  primeDB: new TEMP.PrimeDatabaseService()
+  printer: new TEMP.Printer()
 
 # --------------
 # Initialisation
@@ -56,8 +62,7 @@ VENDOR.program
   .parse process.argv
 
 if VENDOR.program.nth
-  new LIB.primeDB()
-    .nth parseInt(VENDOR.program.nth), LIB.printer.nth
+  LIB.primeDB.nth parseInt(VENDOR.program.nth), LIB.printer.nth
 
 if VENDOR.program.isPrime
   new LIB.primeDB()
