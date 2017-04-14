@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Développeur ....: K3rn€l_P4n1K
+# Description ....: prdb - 1.0 - samedi 15 avril 2017, 01:21:57 (UTC+0200)
+# Dépendances ....: bash, sqlite3
+
+# Fonctionnalité .: Point d'accès à la base de données
+# Intention ......: Simplifier l'accès à la base de données
+# Remarque .......: N/A
+
+# ------------------
+# VARIABLES GLOBALES
+# ------------------
+
+# Chemin du script
+SCRIPT="${0}"
+
+# Nom du script
+SCRIPT_NAME="$( basename ${0} )"
+
+# Dossier du script
+SCRIPT_DIR="$( dirname ${0} )"
+
+# --------------
+# INITIALISATION
+# --------------
+
+USAGE="USAGE: ${SCRIPT_NAME} <file.sql>"
+DATABASE="${SCRIPT_DIR}/database/data/primeDB.db"
+
+# Si pas de premier argument, on sors du script en affichant l'usage
+SQL_FILE=${1?${USAGE}}
+
+# -----------
+# TRAITEMENTS
+# -----------
+
+cat "${SQL_FILE}" | sqlite3 "${DATABASE}"
