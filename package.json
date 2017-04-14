@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "description": "Client pour une base de données sqlite3",
   "main": "public/service/PrimeDatabaseService.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script/register",
     "install": "bash ./database/bin/primeDB_setup"
   },
   "repository": {
@@ -24,19 +20,6 @@
   "bugs": {
     "url": "https://github.com/Phreno/prime-database/issues"
   },
-  "homepage": "https://github.com/Phreno/prime-database#readme",
-  "dependencies": {
-    "coffee-script": "^1.12.4",
-    "commander": "^2.9.0",
-    "gulp-coffee": "^2.3.4",
-    "gulp-concat": "^2.6.1",
-    "gulp-util": "^3.0.8",
-    "sqlite3": "^3.1.8",
-    "winston": "^2.3.1"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
-    "gulp": "^3.9.1"
+  "homepage": "https://github.com/Phreno/prime-database#readme"
   }
 }
