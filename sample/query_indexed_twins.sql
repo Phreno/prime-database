@@ -1,5 +1,5 @@
--- 
--- PrimeDB - Sélection des nombres premiers jumeaux
+--
+-- PrimeDB - Sélection du premiers termes de chaque couple des nombres premiers jumeaux
 --
 
 -- ======================
@@ -7,7 +7,7 @@
 -- ======================
 
 -----------------------
--- MODIFIE LA BASE: NON 
+-- MODIFIE LA BASE: NON
 -----------------------
 
 -- Date........ samedi 15 avril 2017, 00:49:54 (UTC+0200)
@@ -22,7 +22,8 @@
 
 .separator ;
 SELECT
-p1.rowid,p1.value
+p1.rowid
+,p1.value
 FROM
 prime AS p1
 INNER JOIN prime AS p2 ON p1.value = p2.value - 2

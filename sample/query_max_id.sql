@@ -1,5 +1,5 @@
 --
--- PrimeDB - Récupère tous les nombres premiers
+-- PrimeDB - Récupère l'index du plus grand prime contenu dans la BDD
 --
 
 -- ======================
@@ -10,15 +10,15 @@
 -- MODIFIE LA BASE: NON
 -----------------------
 
--- Date........ samedi 15 avril 2017, 09:09:02 (UTC+0200)
--- Objectifs... Récupère la suite des nombres premiers
--- Intention... J'avais envie d'écrire un cartouche
+-- Date........ samedi 15 avril 2017, 15:46:56 (UTC+0200)
+-- Objectifs... Déterminer les limites de la base
+-- Intention... Limiter le champ de recherche
 -- Etat........ TESTED
 
 ------------------
 -- Commentaires --
 ------------------
 -- N/A
-.separator ;
-SELECT rowid, value
+
+SELECT max(rowid)
 FROM prime;
