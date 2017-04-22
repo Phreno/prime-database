@@ -37,11 +37,10 @@
 -- You should have received a copy of the GNU General Public License
 -- along with primeDB. If not, see <http://www.gnu.org/licenses/>.
 
-SELECT rowid, value
+SELECT p1.rowid, p1.value
 FROM prime AS p1
 INNER JOIN prime AS p2 ON p1.value = p2.value - 2
 WHERE
-value >=#min_rowid AND
-value <=#max_rowid;
-
+p1.value >=#min_rowid AND
+p1.value <=#max_rowid;
 .quit

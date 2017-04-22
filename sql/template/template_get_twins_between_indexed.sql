@@ -1,5 +1,5 @@
 -- Développeur ....: K3rn€l_P4n1K
--- Nom ............: PrimeDB/template_get_twins_between
+-- Nom ............: PrimeDB/template_get_twins_between_indexed
 -- Description ....: Donne la suite des nombres premiers jumeaux contenus entre deux valeurs
 -- Version ........: 1.0
 -- Date ...........: samedi 22 avril 2017, 14:55:15 (UTC+0200)
@@ -37,11 +37,10 @@
 -- You should have received a copy of the GNU General Public License
 -- along with primeDB. If not, see <http://www.gnu.org/licenses/>.
 
-SELECT rowid, value
+SELECT p1.rowid, p1.value
 FROM prime AS p1
 INNER JOIN prime AS p2 ON p1.value = p2.value - 2
 WHERE
-rowid >=#min_value AND
-rowid <=#max_value;
-
+p1.rowid >=#min_value AND
+p1.rowid <=#max_value;
 .quit
