@@ -1,52 +1,172 @@
-# prime-database
+.Informations générales
+[format="csv"]
+|======================
+Rédacteur, K3rn€l P4n1k
+Date, samedi 22 avril 2017
+État, Rédigé
+|======================
 
-prime-database installe une banque de données de 50 Millions de nombres premiers.
+.License
+Ce programme est un logiciel libre ; vous pouvez le redistribuer ou le modifier suivant les termes de la
+GNU General Public License telle que publiée par la Free Software Foundation ; soit la version 3 de la
+licence,soit (à votre gré) toute version ultérieure.
 
-Le propos de cette applications et d'économiser les temps de calcul en préférant la recherche à la décomposition de facteur.
+Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE ; sans même la garantie tacite de QUALITÉ MARCHANDE
+ou d'ADÉQUATION à UN BUT PARTICULIER. Consultez la GNU General Public License pour plus de détails.
 
-# Installation de la base de données
+Vous devez avoir reçu une copie de la GNU General Public License en même temps que ce programme ; si ce n'est pas le cas, consultez <http://www.gnu.org/licenses>."
 
-Prévoir 1,5 Giga (estimation large) de libre pour l'installation. Le fichier final fait un peu moins de 700 Méga.
+# PrimeDB
 
-## Téléchargement de la banque de données
+.Objectif du document
+Documente l'installation et l'usage de *PrimeDB*
 
-L'installation télécharge les fichiers depuis http://primes.utm.edu/lists/small/millions dans le dossier `./prime-database/database/data`
+.Description générale
+PrimeDB est une base de données construite à partir des données disponnible sur http://primes.utm.edu/lists/small/millions.
+Ce repository contient les sources permettant:
 
-  git clone https://github.com/Phreno/prime-database.git
-  ./prime-database/database/bin/primeDB_setup
+- Le téléchargement des données
+- L'import de ces données dans une base SQLite3
+- Un client très sommaire
+- Quelques scripts et templates sql pour automatiser le requêtage
+
+IMPORTANT: Prévoir 1,5 Giga (estimation large) de libre pour l'installation. Le fichier final fait un peu moins de 700 Méga.
+
+.Intention
+Profiter de la capacité de stockage pour économiser du temp de calcul.
 
 ## Dépendances
 
-- SQLite3
+.Liste des outils utilisés
+[format="csv", options="header"]
+|====
+Description, Dépendance, Source
+Système d'exploitation, GNU/Linux, http://www.getgnulinux.org/fr/switch_to_linux/try_or_install/
+Interpreteur, bash, https://www.gnu.org/software/bash/
+Gestion de version, git, https://git-scm.com/downloads
+Base de données, SQLite3, https://www.sqlite.org/download.html
+|====
 
-TIP: L'installation complète à été testée sous Ubuntu 16.04 avec zsh.
+## Installation
 
-## Utilisation
-
-### Avec SQLite3
-
+.Téléchargement et import des donnpes
 [source, bash]
 ----
-sqlite3 ./prime-database/database/data/primeDB.db
-sqlite> select rowid, value from prime where rowid < 100 ;
+git clone https://github.com/Phreno/prime-database.git
+./prime-database/database/bin/primeDB_setup
 ----
 
-## Structure du dossier `database`
+.Structure des fichiers
+database:::
+  * *bin*, fichiers d'installation de la base de données
+  * *data*, instance de la base de données
+  * *lib*, dépendances des fichiers d'installation
+    . `base.profile` Les constantes
+    . `core.profile` Les fonctions
+    . `error.profile` Gestion des erreurs (source stackoverflow)
+    . `setup.profile` Fonctions d'installation
+  * *sql*, fichiers de création de la table et template d'import
+  * *test*, pour des tests mannuels
+LICENSE:::
+  * `gpl-3.0.txt`, license GNU GPL v3
+  * `LICENSE`, déclaration de permission de copie
+sql:::
+  * *template*, modèle de requête à mettre à jour
 
-- `bin` Comprend le script d'installation de la base de données
-- `data` Contient les fichiers temporaires et la base de données finale
-- `lib` Toutes les dépendances du script d'installation
-- `sql` Script de crétion et template d'import de la base de données
-- `test` Tests mannuels sur les opérations effectuées sur les fichiers temporaires
+## Usage
 
-### Détail des dépendances internes
+En assumant pour la suite du document le paramètrage suivant:
 
-- `base.profile` Les constantes
-- `core.profile` Les fonctions
-- `error.profile` Gestion des erreurs (source stackoverflow)
-- `setup.profile` Fonctions d'installation
+.Paramètrage commun à la suite des explications
+[source, bash]
+----
+PRIME_DB="/chemin/vers/la/racine/du/projet"
+DATABASE="${PRIME_DB}/database/data/primeDB.db"
+SQL="${PRIME_DB}/sql"
+TEMPLATE="${SQL}/template"
+----
 
-### Notes complémentaires
+### Utilisation de SQLite3
+.Sélection des 9 premiers enregistrements avec SQLite3
+[source, bash]
+----
+sqlite3 "${DATABASE}"
+sqlite3 sqlite> select rowid, value from prime where rowid < 10;
 
-L'utilisation de SQLite3 s'est faite tardivement dans l'application, si bien que `core.profile` & `setup.profile` contiennent
-quelques fonctions obsolètes, qui étaient destinées pour travailler sur les fichiers plats.
+# Résultat
+# 2
+# 3
+# 5
+# 7
+# 11
+# 13
+# 17
+# 19
+# 23
+----
+
+.La même requête en externalisée dans le fichier `${SQL_QUERY}`
+[source, bash]
+----
+SQL_QUERY="$(mktemp)"
+echo "select rowid, value from prime where rowid < 10;" > "${SQL_QUERY}"
+cat "${SQL_QUERY}" | sqlite3 "${DATABASE}"
+
+# Résultat
+# 2
+# 3
+# 5
+# 7
+# 11
+# 13
+# 17
+# 19
+# 23
+----
+
+## Utilisation du client `prime-db`
+
+`prime-db` est un client sommaire qui encapsule le deuxième type de requête utilisé dans l'explication précédante.
+
+.Signature
+[source, bash]
+----
+prime-db <file.sql>
+----
+
+.Arguments
+[format="csv"]
+|====
+`file.sql`, obligatoire, Fichier sql qui sera joué dans SQLite3
+|====
+
+.Exemple, récupération de la plus grande valeur disponible
+[source, bash]
+----
+prime-db "${SQL}/query_max_value.sql"
+
+# Résultat
+# 982451653
+----
+
+
+.Exemple, utilisation d'un template pour récupérer le 85460ème nombre premier
+[source, bash]
+----
+SQL_QUERY="$(mktemp)"
+cat "${PRIME_TEMPLATE}/template_get_value.sql" | sed 's/#rowid/85460/g' > "${SQL_QUERY}"
+prime-db "${SQL_QUERY}"
+
+# Résultat
+# 1096379
+----
+
+# Commentaires
+L'utilisation de SQLite3 s'est faite tardivement dans l'application, si bien que `core.profile` & `setup.profile` contiennent quelques fonctions obsolètes, qui étaient destinées pour travailler sur les fichiers plats.
+
+# Références
+[format="csv"]
+|====
+Numberphile, https://www.youtube.com/watch?v=iFuR97YcSLM
+njwildberger, https://www.youtube.com/watch?v=z_IAB5T0Qoo&t=1864s
+|====
