@@ -49,7 +49,7 @@ Base de données, SQLite3, https://www.sqlite.org/download.html
 
 ## Installation
 
-.Téléchargement et import des donnpes
+.Téléchargement et import des données
 [source, bash]
 ----
 git clone https://github.com/Phreno/prime-database.git
@@ -131,7 +131,7 @@ cat "${SQL_QUERY}" | sqlite3 "${DATABASE}"
 .Signature
 [source, bash]
 ----
-prime-db <file.sql>
+${PRIME_DB}/prime-db <file.sql>
 ----
 
 .Arguments
@@ -143,7 +143,7 @@ prime-db <file.sql>
 .Exemple, récupération de la plus grande valeur disponible
 [source, bash]
 ----
-prime-db "${SQL}/query_max_value.sql"
+${PRIME_DB}/prime-db "${SQL}/query_max_value.sql"
 
 # Résultat
 # 982451653
@@ -155,7 +155,7 @@ prime-db "${SQL}/query_max_value.sql"
 ----
 SQL_QUERY="$(mktemp)"
 cat "${PRIME_TEMPLATE}/template_get_value.sql" | sed 's/#rowid/85460/g' > "${SQL_QUERY}"
-prime-db "${SQL_QUERY}"
+${PRIME_DB}/prime-db "${SQL_QUERY}"
 
 # Résultat
 # 1096379
