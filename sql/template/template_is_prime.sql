@@ -40,3 +40,4 @@
 SELECT count (*)
 FROM prime
 WHERE value = #value;
+.quit

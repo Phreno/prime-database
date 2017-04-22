@@ -40,5 +40,5 @@
 .separator ;
 SELECT p1.rowid, p1.value
 FROM prime AS p1
-INNER JOIN prime AS p2 ON p1.value = p2.value - 2
-;
+INNER JOIN prime AS p2 ON p1.value = p2.value - 2;
+.quit

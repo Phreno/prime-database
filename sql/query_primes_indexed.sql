@@ -1,12 +1,12 @@
 -- Développeur ....: K3rn€l_P4n1K
--- Nom ............: PrimeDB/select_max_id
--- Description ....: Récupère l'index du plus grand prime contenu en base de données
+-- Nom ............: PrimeDB/select_indexed_primes
+-- Description ....: Récupère la liste de tous les nombres premiers contenus dans la base de données
 -- Version ........: 1.0
--- Date ...........: dimanche 16 avril 2017, 16:23:21 (UTC+0200)
+-- Date ...........: dimanche 16 avril 2017, 16:08:56 (UTC+0200)
 -- Dépendances ....: PrimeDB
--- État ...........: Utilisable
--- Fonctionnalité .: Renvoie le plus grand index
--- Intention ......: Faciliter le requêtage de la base
+-- État ...........: utilisable
+-- Fonctionnalité .: sélectionne les index et les valeurs
+-- Intention ......: Faciliter le requêtage de la base de données
 -- Remarque .......: AUCUN
 
 -----------------------
@@ -37,6 +37,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with PrimeDB. If not, see <http://www.gnu.org/licenses/>.
 
-SELECT max(rowid)
+.separator ;
+SELECT rowid ,value
 FROM prime;
 .quit

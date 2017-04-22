@@ -39,3 +39,4 @@
 
 SELECT max(value)
 FROM prime;
+.quit

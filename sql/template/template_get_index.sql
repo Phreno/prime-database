@@ -39,5 +39,5 @@
 
 SELECT rowid
 FROM prime
-WHERE value = #value
-;
+WHERE value = #value;
+.quit
